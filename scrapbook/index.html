@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 50th Birthday Mom!</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Add this in the head section -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="cover-image">
+            <!-- You'll add a cover image here -->
+            <div class="title-container">
+                <h1>Happy 50th Birthday Mom!</h1>
+                <p class="subtitle">A journey through wonderful memories</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#gallery"><i class="fas fa-images"></i> Photo Gallery</a></li>
+                <li><a href="#messages"><i class="fas fa-envelope-open-text"></i> Messages</a></li>
+                <li><a href="#music"><i class="fas fa-music"></i> Music</a></li>
+                <li><a href="#videos"><i class="fas fa-film"></i> Videos</a></li>
+                <li><a href="#timeline"><i class="fas fa-clock"></i> Timeline</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Photo Gallery Section -->
+        <section id="gallery" class="section">
+            <h2><i class="fas fa-images"></i> Photo Gallery</h2>
+            <div class="gallery-container">
+                <!-- Photos will be added here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section id="messages" class="section">
+            <h2><i class="fas fa-envelope-open-text"></i> Messages</h2>
+            <div class="messages-container">
+                <!-- Messages will be added here -->
+            </div>
+            <div class="add-message">
+                <h3>Add Your Message</h3>
+                <form id="message-form">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <textarea id="message" placeholder="Your Message to Mom" required></textarea>
+                    <button type="submit">Send Message <i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Add this section to your index.html, before the closing </main> tag -->
+        <section id="birthday-card" class="section">
+            <h2><i class="fas fa-birthday-cake"></i> Virtual Birthday Card</h2>
+            <div class="card-container">
+                <div class="card" id="birthday-card-element">
+                    <div class="card-front">
+                        <div class="card-decoration"></div>
+                        <h3>Happy 50th Birthday, Mom!</h3>
+                        <p class="card-subtitle">Click to open</p>
+                    </div>
+                    <div class="card-inside">
+                        <div class="card-message">
+                            <h3>Dear Mom,</h3>
+                            <p class="card-default-message">
+                                Wishing you a wonderful 50th birthday filled with joy, love, and beautiful memories. 
+                                We're so grateful for everything you do and all that you are.
+                            </p>
+                            <div class="card-signatures" id="card-signatures">
+                                <!-- Signatures will be added here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-form-container">
+                    <h3>Sign the Birthday Card</h3>
+                    <form id="card-form">
+                        <input type="text" id="card-name" placeholder="Your Name" required>
+                        <textarea id="card-message-input" placeholder="Your Birthday Message" required></textarea>
+                        <button type="submit">Sign the Card <i class="fas fa-pen-fancy"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section id="music" class="section">
+            <h2><i class="fas fa-music"></i> Music</h2>
+            <div class="music-container">
+                <h3>Mom's Favorite Songs</h3>
+                <div class="spotify-playlists">
+                    <!-- Spotify embeds will go here -->
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Videos Section -->
+        <section id="videos" class="section">
+            <h2><i class="fas fa-film"></i> Videos</h2>
+            <div class="videos-container">
+                <!-- Videos will be added here -->
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="section">
+            <h2><i class="fas fa-clock"></i> Timeline</h2>
+            <div class="timeline-container">
+                <!-- Timeline items will be added here -->
+            </div>
+        </section>
+        
+        <!-- Quiz Section -->
+        <section id="quiz" class="section">
+            <h2><i class="fas fa-question-circle"></i> How Well Do You Know Mom?</h2>
+            <div class="quiz-container">
+                <!-- Quiz will be added here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Guest Book Section -->
+        <section id="guestbook" class="section">
+            <h2><i class="fas fa-book-open"></i> Guest Book</h2>
+            <div class="guestbook-container">
+                <div class="guestbook-entries">
+                    <!-- Entries will be added here by JavaScript -->
+                </div>
+                <div class="add-entry">
+                    <h3>Sign the Guest Book</h3>
+                    <form id="guestbook-form">
+                        <input type="text" id="guest-name" placeholder="Your Name" required>
+                        <input type="text" id="guest-location" placeholder="Where You're From (optional)">
+                        <textarea id="guest-message" placeholder="Your Message" required></textarea>
+                        <button type="submit">Sign Guest Book <i class="fas fa-pen-fancy"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Facts -->
+        <section id="facts" class="section">
+            <h2><i class="fas fa-lightbulb"></i> 50 Facts About Mom</h2>
+            <div class="facts-container">
+                <div class="facts-intro">
+                    <p>Here are 50 interesting and fun facts about Mom that you might not know!</p>
+                </div>
+                <div class="facts-grid" id="facts-grid">
+                    <!-- Facts will be added here by JavaScript -->
+                </div>
+                <div class="facts-navigation">
+                    <button id="prev-facts" class="facts-nav-button"><i class="fas fa-arrow-left"></i></button>
+                    <span id="facts-counter">1-10 of 50</span>
+                    <button id="next-facts" class="facts-nav-button"><i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Favourites -->
+        <section id="favorites" class="section">
+            <h2><i class="fas fa-heart"></i> Mom's Favorites</h2>
+            <div class="favorites-container">
+                <div class="favorites-intro">
+                    <p>A collection of the things Mom loves most in life!</p>
+                </div>
+                
+                <div class="favorites-tabs">
+                    <button class="favorite-tab active" data-category="books">
+                        <i class="fas fa-book"></i> Books
+                    </button>
+                    <button class="favorite-tab" data-category="movies">
+                        <i class="fas fa-film"></i> Movies
+                    </button>
+                    <button class="favorite-tab" data-category="foods">
+                        <i class="fas fa-utensils"></i> Foods
+                    </button>
+                    <button class="favorite-tab" data-category="places">
+                        <i class="fas fa-map-marker-alt"></i> Places
+                    </button>
+                    <button class="favorite-tab" data-category="music">
+                        <i class="fas fa-music"></i> Music
+                    </button>
+                </div>
+                
+                <div class="favorites-content">
+                    <div class="favorites-grid" id="favorites-grid">
+                        <!-- Favorites items will be added here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- History -->
+        <section id="history" class="section">
+            <h2><i class="fas fa-history"></i> This Day in History</h2>
+            <div class="history-container">
+                <div class="history-intro">
+                    <p>On the day Mom was born - <span class="birthday-date">April 6, 1975</span> - these events were happening around the world:</p>
+                </div>
+                
+                <div class="history-timeline">
+                    <!-- History items will be added here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- word cloud -->
+        <section id="word-cloud" class="section">
+            <h2><i class="fas fa-cloud"></i> Word Cloud</h2>
+            <div class="wordcloud-container">
+                <div class="wordcloud-intro">
+                    <p>Words that describe Mom, contributed by family and friends:</p>
+                </div>
+                
+                <div class="wordcloud-canvas-container">
+                    <div id="wordcloud-canvas" class="wordcloud-canvas"></div>
+                </div>
+                
+                <div class="wordcloud-form-container">
+                    <h3>Add Your Word</h3>
+                    <form id="wordcloud-form">
+                        <input type="text" id="contributor-name" placeholder="Your Name" required>
+                        <input type="text" id="word-input" placeholder="Word that describes Mom" maxlength="20" required>
+                        <button type="submit">Add Word <i class="fas fa-plus"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add D3.js for the word cloud -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+
+    </main>
+
+    <footer>
+        <p>Made with <i class="fas fa-heart"></i> for Mom's 50th Birthday</p>
+    </footer>
+
+    <!-- Modal for image popup -->
+    <div id="image-modal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="caption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
