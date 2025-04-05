@@ -387,22 +387,16 @@ function setupQuiz() {
                     
                     // Save to Firebase
                     addLeaderboardEntryToFirebase(newEntry).then(() => {
-                        // Reload the leaderboard
-                        loadLeaderboardFromFirebase().then(updatedLeaderboard => {
-                            // Show updated leaderboard
-                            alert('Your score has been added to the leaderboard!');
-                            
-                            // Show just the leaderboard without a try again button
-                            quizContainer.innerHTML = '';
-                            displayLeaderboard(quizContainer, updatedLeaderboard);
-                            
-                            // Add a message to encourage others to try
-                            const messageElement = document.createElement('p');
-                            messageElement.textContent = 'See if someone else can beat your score!';
-                            messageElement.style.textAlign = 'center';
-                            messageElement.style.marginTop = '1rem';
-                            quizContainer.appendChild(messageElement);
-                        });
+                        // ✅ DON'T reload manually!
+                        alert('Your score has been added to the leaderboard!');
+                        
+                        // Show just a nice message
+                        quizContainer.innerHTML = '';
+                        const messageElement = document.createElement('p');
+                        messageElement.textContent = 'See if someone else can beat your score!';
+                        messageElement.style.textAlign = 'center';
+                        messageElement.style.marginTop = '1rem';
+                        quizContainer.appendChild(messageElement);
                     }).catch(error => {
                         console.error("Error adding score to leaderboard: ", error);
                         alert('There was an error saving your score. Please try again.');
