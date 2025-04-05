@@ -186,7 +186,6 @@ function createCountdown() {
 
 // Quiz Functionality
 
-// Quiz Functionality with Firebase Integration
 function setupQuiz() {
     // Sample quiz questions - replace with real questions about your mom
     const quizQuestions = [
@@ -217,9 +216,6 @@ function setupQuiz() {
         }
     ];
     
-    // Load leaderboard from Firebase
-    let leaderboard = [];
-    
     // Get the quiz container
     const quizContainer = document.querySelector('.quiz-container');
     if (!quizContainer) return; // Safety check
@@ -237,8 +233,8 @@ function setupQuiz() {
     quizContainer.appendChild(quizIntro);
     
     // Load leaderboard from Firebase and display it
-    loadLeaderboardFromFirebase().then(data => {
-        leaderboard = data;
+    loadLeaderboardFromFirebase().then(leaderboard => {
+        // Display leaderboard only once at the start
         displayLeaderboard(quizContainer, leaderboard);
         
         // Variables to track quiz state
@@ -256,8 +252,11 @@ function setupQuiz() {
             currentQuestion = 0;
             score = 0;
             
-            // Clear quiz container
-            quizContainer.innerHTML = '';
+            // Remove leaderboard
+            const existingLeaderboard = quizContainer.querySelector('.quiz-leaderboard');
+            if (existingLeaderboard) {
+                existingLeaderboard.remove();
+            }
             
             // Show first question
             showQuestion();
@@ -387,7 +386,6 @@ function setupQuiz() {
                     
                     // Save to Firebase
                     addLeaderboardEntryToFirebase(newEntry).then(() => {
-                        // ✅ DON'T reload manually!
                         alert('Your score has been added to the leaderboard!');
                         
                         // Show just a nice message
@@ -407,7 +405,7 @@ function setupQuiz() {
     }).catch(error => {
         console.error("Error loading leaderboard: ", error);
         // If there's an error, use sample data
-        leaderboard = [
+        const leaderboard = [
             { name: "Sarah", score: 100, date: "2023-02-15" },
             { name: "Dad", score: 80, date: "2023-02-14" },
             { name: "Mike", score: 60, date: "2023-02-13" }
@@ -416,98 +414,38 @@ function setupQuiz() {
     });
 }
 
-// Function to load leaderboard from Firebase
-function loadLeaderboardFromFirebase() {
-    return db.collection('quizLeaderboard')
-        .orderBy('score', 'desc')
-        .get()
-        .then(snapshot => {
-            const leaderboard = [];
-            snapshot.forEach(doc => {
-                leaderboard.push(doc.data());
-            });
-            return leaderboard;
-        });
-}
+// Rest of the functions remain the same as in the original code
 
-// Function to add a new entry to the leaderboard in Firebase
-function addLeaderboardEntryToFirebase(entry) {
-    return db.collection('quizLeaderboard').add(entry);
-}
-
-function displayLeaderboard(container, leaderboard) {
-    if (!container) return; // Safety check
+// Add CSS to improve option styling
+const styleElement = document.createElement('style');
+styleElement.textContent = `
+    .quiz-option {
+        background-color: #f0f0f0;
+        color: #333;
+        border: 2px solid #ddd;
+        transition: all 0.3s ease;
+    }
     
-    // Create leaderboard element
-    const leaderboardElement = document.createElement('div');
-    leaderboardElement.className = 'quiz-leaderboard';
+    .quiz-option:hover {
+        background-color: #e0e0e0;
+    }
     
-    // Create leaderboard header
-    const leaderboardHeader = document.createElement('h3');
-    leaderboardHeader.textContent = 'Quiz Leaderboard';
+    .quiz-option.correct {
+        background-color: #4CAF50;
+        color: white;
+    }
     
-    // Create leaderboard table
-    const leaderboardTable = document.createElement('table');
-    leaderboardTable.className = 'leaderboard-table';
+    .quiz-option.wrong {
+        background-color: #f44336;
+        color: white;
+    }
     
-    // Create table header
-    const tableHeader = document.createElement('thead');
-    tableHeader.innerHTML = `
-        <tr>
-            <th class="leaderboard-rank">Rank</th>
-            <th class="leaderboard-name">Name</th>
-            <th class="leaderboard-score">Score</th>
-            <th class="leaderboard-date">Date</th>
-        </tr>
-    `;
-    
-    // Create table body
-    const tableBody = document.createElement('tbody');
-    
-    // Add entries to table
-    leaderboard.forEach((entry, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="leaderboard-rank">${index + 1}</td>
-            <td class="leaderboard-name">${entry.name}</td>
-            <td class="leaderboard-score">${entry.score}%</td>
-            <td class="leaderboard-date">${formatDate(entry.date)}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-    
-    // Assemble the leaderboard
-    leaderboardTable.appendChild(tableHeader);
-    leaderboardTable.appendChild(tableBody);
-    leaderboardElement.appendChild(leaderboardHeader);
-    leaderboardElement.appendChild(leaderboardTable);
-    
-    // Add to the container
-    container.appendChild(leaderboardElement);
-}
-
-// Setup real-time updates for the leaderboard
-function setupLeaderboardRealTimeUpdates() {
-    db.collection('quizLeaderboard')
-        .orderBy('score', 'desc')
-        .onSnapshot(snapshot => {
-            const leaderboard = [];
-            snapshot.forEach(doc => {
-                leaderboard.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-            });
-            
-            const quizContainer = document.querySelector('.quiz-container');
-            if (quizContainer && quizContainer.querySelector('.quiz-leaderboard')) {
-                // Only update the leaderboard if it's currently displayed (not during a quiz)
-                displayLeaderboard(quizContainer, leaderboard);
-            }
-        }, error => {
-            console.error("Error setting up real-time leaderboard:", error);
-        });
-}
+    .quiz-option:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+`;
+document.head.appendChild(styleElement);
 
 // Hero Slideshow
 function setupHeroSlideshow() {
