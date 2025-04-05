@@ -1,3 +1,18 @@
+// Firebase configuration and initialization
+let db;
+let storage;
+
+function initializeFirebase() {
+    // Firebase Firestore
+    db = firebase.firestore();
+    
+    // Firebase Storage
+    storage = firebase.storage();
+    
+    console.log("Firebase initialized successfully");
+}
+
+
 // Password Protection Functions
 function checkAuth() {
     return localStorage.getItem('scrapbookAuth') === 'true';
@@ -170,6 +185,7 @@ function createCountdown() {
 
 // Quiz Functionality
 
+// Quiz Functionality with Firebase Integration
 function setupQuiz() {
     // Sample quiz questions - replace with real questions about your mom
     const quizQuestions = [
@@ -200,19 +216,8 @@ function setupQuiz() {
         }
     ];
     
-    // Load leaderboard from localStorage or use sample data if none exists
-    let leaderboard = loadLeaderboardFromStorage();
-    
-    // If no leaderboard in storage, use sample data
-    if (leaderboard.length === 0) {
-        leaderboard = [
-            { name: "Sarah", score: 100, date: "2023-02-15" },
-            { name: "Dad", score: 80, date: "2023-02-14" },
-            { name: "Mike", score: 60, date: "2023-02-13" }
-        ];
-        // Save the sample leaderboard to storage
-        saveLeaderboardToStorage(leaderboard);
-    }
+    // Load leaderboard from Firebase
+    let leaderboard = [];
     
     // Get the quiz container
     const quizContainer = document.querySelector('.quiz-container');
@@ -230,186 +235,209 @@ function setupQuiz() {
     quizContainer.innerHTML = '';
     quizContainer.appendChild(quizIntro);
     
-    // Add leaderboard
-    displayLeaderboard(quizContainer, leaderboard);
-    
-    // Variables to track quiz state
-    let currentQuestion = 0;
-    let score = 0;
-    
-    // Start quiz when button is clicked
-    const startButton = document.getElementById('start-quiz');
-    if (startButton) {
-        startButton.addEventListener('click', startQuiz);
-    }
-    
-    function startQuiz() {
-        // Reset quiz state
-        currentQuestion = 0;
-        score = 0;
+    // Load leaderboard from Firebase and display it
+    loadLeaderboardFromFirebase().then(data => {
+        leaderboard = data;
+        displayLeaderboard(quizContainer, leaderboard);
         
-        // Clear quiz container
-        quizContainer.innerHTML = '';
+        // Variables to track quiz state
+        let currentQuestion = 0;
+        let score = 0;
         
-        // Show first question
-        showQuestion();
-    }
-    
-    function showQuestion() {
-        // Get current question data
-        const questionData = quizQuestions[currentQuestion];
+        // Start quiz when button is clicked
+        const startButton = document.getElementById('start-quiz');
+        if (startButton) {
+            startButton.addEventListener('click', startQuiz);
+        }
         
-        // Create question element
-        const questionElement = document.createElement('div');
-        questionElement.className = 'quiz-question';
-        
-        // Question number and text
-        questionElement.innerHTML = `
-            <h3>Question ${currentQuestion + 1} of ${quizQuestions.length}</h3>
-            <p class="question-text">${questionData.question}</p>
-            <div class="quiz-options"></div>
-        `;
-        
-        // Add options
-        const optionsContainer = questionElement.querySelector('.quiz-options');
-        questionData.options.forEach((option, index) => {
-            const optionButton = document.createElement('button');
-            optionButton.className = 'quiz-option';
-            optionButton.textContent = option;
+        function startQuiz() {
+            // Reset quiz state
+            currentQuestion = 0;
+            score = 0;
             
-            // Add click event for option
-            optionButton.addEventListener('click', () => {
-                // Check if correct
-                if (index === questionData.correct) {
-                    score++;
-                    optionButton.classList.add('correct');
-                } else {
-                    optionButton.classList.add('wrong');
-                    // Show which one was correct
-                    const correctButton = optionsContainer.querySelectorAll('.quiz-option')[questionData.correct];
-                    if (correctButton) {
-                        correctButton.classList.add('correct');
-                    }
-                }
+            // Clear quiz container
+            quizContainer.innerHTML = '';
+            
+            // Show first question
+            showQuestion();
+        }
+        
+        function showQuestion() {
+            // Get current question data
+            const questionData = quizQuestions[currentQuestion];
+            
+            // Create question element
+            const questionElement = document.createElement('div');
+            questionElement.className = 'quiz-question';
+            
+            // Question number and text
+            questionElement.innerHTML = `
+                <h3>Question ${currentQuestion + 1} of ${quizQuestions.length}</h3>
+                <p class="question-text">${questionData.question}</p>
+                <div class="quiz-options"></div>
+            `;
+            
+            // Add options
+            const optionsContainer = questionElement.querySelector('.quiz-options');
+            questionData.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'quiz-option';
+                optionButton.textContent = option;
                 
-                // Disable all option buttons
-                optionsContainer.querySelectorAll('.quiz-option').forEach(btn => {
-                    btn.disabled = true;
-                });
-                
-                // Show next button
-                const nextButton = document.createElement('button');
-                nextButton.className = 'quiz-button next-button';
-                nextButton.textContent = currentQuestion < quizQuestions.length - 1 ? 'Next Question' : 'See Results';
-                nextButton.addEventListener('click', () => {
-                    if (currentQuestion < quizQuestions.length - 1) {
-                        currentQuestion++;
-                        showQuestion();
+                // Add click event for option
+                optionButton.addEventListener('click', () => {
+                    // Check if correct
+                    if (index === questionData.correct) {
+                        score++;
+                        optionButton.classList.add('correct');
                     } else {
-                        showResults();
+                        optionButton.classList.add('wrong');
+                        // Show which one was correct
+                        const correctButton = optionsContainer.querySelectorAll('.quiz-option')[questionData.correct];
+                        if (correctButton) {
+                            correctButton.classList.add('correct');
+                        }
                     }
+                    
+                    // Disable all option buttons
+                    optionsContainer.querySelectorAll('.quiz-option').forEach(btn => {
+                        btn.disabled = true;
+                    });
+                    
+                    // Show next button
+                    const nextButton = document.createElement('button');
+                    nextButton.className = 'quiz-button next-button';
+                    nextButton.textContent = currentQuestion < quizQuestions.length - 1 ? 'Next Question' : 'See Results';
+                    nextButton.addEventListener('click', () => {
+                        if (currentQuestion < quizQuestions.length - 1) {
+                            currentQuestion++;
+                            showQuestion();
+                        } else {
+                            showResults();
+                        }
+                    });
+                    questionElement.appendChild(nextButton);
                 });
-                questionElement.appendChild(nextButton);
+                
+                optionsContainer.appendChild(optionButton);
             });
             
-            optionsContainer.appendChild(optionButton);
-        });
-        
-        // Add to quiz container
-        quizContainer.innerHTML = '';
-        quizContainer.appendChild(questionElement);
-    }
-    
-    function showResults() {
-        // Calculate percentage
-        const percentage = Math.round((score / quizQuestions.length) * 100);
-        
-        // Determine message based on score
-        let message;
-        if (percentage >= 80) {
-            message = "Amazing! You really know Mom well!";
-        } else if (percentage >= 60) {
-            message = "Good job! You know quite a bit about Mom.";
-        } else if (percentage >= 40) {
-            message = "Not bad, but there's more to learn about Mom!";
-        } else {
-            message = "Time to get to know Mom better!";
+            // Add to quiz container
+            quizContainer.innerHTML = '';
+            quizContainer.appendChild(questionElement);
         }
         
-        // Create results element
-        const resultsElement = document.createElement('div');
-        resultsElement.className = 'quiz-results';
-        resultsElement.innerHTML = `
-            <h3>Quiz Results</h3>
-            <div class="score-display">
-                <div class="score-circle">
-                    <span class="score-value">${percentage}%</span>
+        function showResults() {
+            // Calculate percentage
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            // Determine message based on score
+            let message;
+            if (percentage >= 80) {
+                message = "Amazing! You really know Mom well!";
+            } else if (percentage >= 60) {
+                message = "Good job! You know quite a bit about Mom.";
+            } else if (percentage >= 40) {
+                message = "Not bad, but there's more to learn about Mom!";
+            } else {
+                message = "Time to get to know Mom better!";
+            }
+            
+            // Create results element
+            const resultsElement = document.createElement('div');
+            resultsElement.className = 'quiz-results';
+            resultsElement.innerHTML = `
+                <h3>Quiz Results</h3>
+                <div class="score-display">
+                    <div class="score-circle">
+                        <span class="score-value">${percentage}%</span>
+                    </div>
                 </div>
-            </div>
-            <p class="result-message">${message}</p>
-            <p>You got ${score} out of ${quizQuestions.length} questions correct.</p>
+                <p class="result-message">${message}</p>
+                <p>You got ${score} out of ${quizQuestions.length} questions correct.</p>
+                
+                <div class="quiz-name-input">
+                    <label for="leaderboard-name">Add your name to the leaderboard:</label>
+                    <input type="text" id="leaderboard-name" placeholder="Your Name">
+                    <button id="save-score" class="quiz-button">Save Score</button>
+                </div>
+            `;
             
-            <div class="quiz-name-input">
-                <label for="leaderboard-name">Add your name to the leaderboard:</label>
-                <input type="text" id="leaderboard-name" placeholder="Your Name">
-                <button id="save-score" class="quiz-button">Save Score</button>
-            </div>
-        `;
-        
-        // Add to quiz container
-        quizContainer.innerHTML = '';
-        quizContainer.appendChild(resultsElement);
-        
-        // Add save score functionality
-        const saveButton = document.getElementById('save-score');
-        if (saveButton) {
-            saveButton.addEventListener('click', function() {
-                const nameInput = document.getElementById('leaderboard-name');
-                if (!nameInput) return;
-                
-                const name = nameInput.value;
-                if (name.trim() === '') {
-                    alert('Please enter your name to save your score.');
-                    return;
-                }
-                
-                // Add to leaderboard
-                const date = new Date().toISOString().split('T')[0];
-                leaderboard.push({ name, score: percentage, date });
-                
-                // Sort leaderboard by score (highest first)
-                leaderboard.sort((a, b) => b.score - a.score);
-                
-                // Save to localStorage
-                saveLeaderboardToStorage(leaderboard);
-                
-                // Show updated leaderboard
-                alert('Your score has been added to the leaderboard!');
-                
-                // Show just the leaderboard without a try again button
-                quizContainer.innerHTML = '';
-                displayLeaderboard(quizContainer, leaderboard);
-                
-                // Add a message to encourage others to try
-                const messageElement = document.createElement('p');
-                messageElement.textContent = 'See if someone else can beat your score!';
-                messageElement.style.textAlign = 'center';
-                messageElement.style.marginTop = '1rem';
-                quizContainer.appendChild(messageElement);
-            });
+            // Add to quiz container
+            quizContainer.innerHTML = '';
+            quizContainer.appendChild(resultsElement);
+            
+            // Add save score functionality
+            const saveButton = document.getElementById('save-score');
+            if (saveButton) {
+                saveButton.addEventListener('click', function() {
+                    const nameInput = document.getElementById('leaderboard-name');
+                    if (!nameInput) return;
+                    
+                    const name = nameInput.value;
+                    if (name.trim() === '') {
+                        alert('Please enter your name to save your score.');
+                        return;
+                    }
+                    
+                    // Add to leaderboard
+                    const date = new Date().toISOString().split('T')[0];
+                    const newEntry = { name, score: percentage, date };
+                    
+                    // Save to Firebase
+                    addLeaderboardEntryToFirebase(newEntry).then(() => {
+                        // Reload the leaderboard
+                        loadLeaderboardFromFirebase().then(updatedLeaderboard => {
+                            // Show updated leaderboard
+                            alert('Your score has been added to the leaderboard!');
+                            
+                            // Show just the leaderboard without a try again button
+                            quizContainer.innerHTML = '';
+                            displayLeaderboard(quizContainer, updatedLeaderboard);
+                            
+                            // Add a message to encourage others to try
+                            const messageElement = document.createElement('p');
+                            messageElement.textContent = 'See if someone else can beat your score!';
+                            messageElement.style.textAlign = 'center';
+                            messageElement.style.marginTop = '1rem';
+                            quizContainer.appendChild(messageElement);
+                        });
+                    }).catch(error => {
+                        console.error("Error adding score to leaderboard: ", error);
+                        alert('There was an error saving your score. Please try again.');
+                    });
+                });
+            }
         }
-    }
+    }).catch(error => {
+        console.error("Error loading leaderboard: ", error);
+        // If there's an error, use sample data
+        leaderboard = [
+            { name: "Sarah", score: 100, date: "2023-02-15" },
+            { name: "Dad", score: 80, date: "2023-02-14" },
+            { name: "Mike", score: 60, date: "2023-02-13" }
+        ];
+        displayLeaderboard(quizContainer, leaderboard);
+    });
 }
 
-// Function to load leaderboard from localStorage
-function loadLeaderboardFromStorage() {
-    const leaderboardJson = localStorage.getItem('quizLeaderboard');
-    return leaderboardJson ? JSON.parse(leaderboardJson) : [];
+// Function to load leaderboard from Firebase
+function loadLeaderboardFromFirebase() {
+    return db.collection('quizLeaderboard')
+        .orderBy('score', 'desc')
+        .get()
+        .then(snapshot => {
+            const leaderboard = [];
+            snapshot.forEach(doc => {
+                leaderboard.push(doc.data());
+            });
+            return leaderboard;
+        });
 }
 
-// Function to save leaderboard to localStorage
-function saveLeaderboardToStorage(leaderboard) {
-    localStorage.setItem('quizLeaderboard', JSON.stringify(leaderboard));
+// Function to add a new entry to the leaderboard in Firebase
+function addLeaderboardEntryToFirebase(entry) {
+    return db.collection('quizLeaderboard').add(entry);
 }
 
 function displayLeaderboard(container, leaderboard) {
@@ -461,6 +489,29 @@ function displayLeaderboard(container, leaderboard) {
     
     // Add to the container
     container.appendChild(leaderboardElement);
+}
+
+// Setup real-time updates for the leaderboard
+function setupLeaderboardRealTimeUpdates() {
+    db.collection('quizLeaderboard')
+        .orderBy('score', 'desc')
+        .onSnapshot(snapshot => {
+            const leaderboard = [];
+            snapshot.forEach(doc => {
+                leaderboard.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            const quizContainer = document.querySelector('.quiz-container');
+            if (quizContainer && quizContainer.querySelector('.quiz-leaderboard')) {
+                // Only update the leaderboard if it's currently displayed (not during a quiz)
+                displayLeaderboard(quizContainer, leaderboard);
+            }
+        }, error => {
+            console.error("Error setting up real-time leaderboard:", error);
+        });
 }
 
 // Hero Slideshow
@@ -719,6 +770,7 @@ function setupSmoothScrolling() {
 }
 
 // Guest Book Functionality
+// Guest Book Functionality with Firebase Integration
 function setupGuestBook() {
     // First, check if the Guest Book section exists in HTML
     // If not, create it
@@ -726,39 +778,60 @@ function setupGuestBook() {
         createGuestBookSection();
     }
     
-    // Load entries from localStorage or use sample entries if none exist
-    let guestEntries = loadGuestEntriesFromStorage();
-    
-    // If no entries in storage, use sample entries
-    if (guestEntries.length === 0) {
-        guestEntries = [
-            { name: 'John Smith', location: 'New York', date: '2023-02-20', message: 'Happy 50th Birthday! Wishing you all the best on your special day.' },
-            { name: 'Mary Johnson', location: 'Chicago', date: '2023-02-19', message: 'Such a beautiful tribute to your mom! Happy Birthday to her!' },
-            { name: 'Robert Davis', location: 'Los Angeles', date: '2023-02-18', message: 'Congratulations on reaching this milestone. Have a wonderful celebration!' }
-        ];
-        // Save the sample entries to storage
-        saveGuestEntriesToStorage(guestEntries);
-    }
-    
-    // Load entries into the DOM
-    loadGuestEntries(guestEntries);
-    
-    // Setup the form
-    setupGuestBookForm(guestEntries);
-    
-    // Add to navigation menu
-    addGuestBookNavItem();
+    // Load entries from Firebase
+    loadGuestEntriesFromFirebase()
+        .then(entries => {
+            // If no entries in Firebase, use sample entries
+            if (entries.length === 0) {
+                const sampleEntries = [
+                    { name: 'John Smith', location: 'New York', date: '2023-02-20', message: 'Happy 50th Birthday! Wishing you all the best on your special day.' },
+                    { name: 'Mary Johnson', location: 'Chicago', date: '2023-02-19', message: 'Such a beautiful tribute to your mom! Happy Birthday to her!' },
+                    { name: 'Robert Davis', location: 'Los Angeles', date: '2023-02-18', message: 'Congratulations on reaching this milestone. Have a wonderful celebration!' }
+                ];
+                
+                // Add sample entries to Firebase
+                const promises = sampleEntries.map(entry => addGuestEntryToFirebase(entry));
+                return Promise.all(promises)
+                    .then(() => loadGuestEntriesFromFirebase());
+            }
+            
+            return entries;
+        })
+        .then(entries => {
+            // Load entries into the DOM
+            loadGuestEntries(entries);
+            
+            // Setup the form
+            setupGuestBookForm();
+            
+            // Add to navigation menu
+            addGuestBookNavItem();
+        })
+        .catch(error => {
+            console.error("Error setting up guest book:", error);
+        });
 }
 
-// Function to load guest entries from localStorage
-function loadGuestEntriesFromStorage() {
-    const entriesJson = localStorage.getItem('guestEntries');
-    return entriesJson ? JSON.parse(entriesJson) : [];
+// Function to load guest entries from Firebase
+function loadGuestEntriesFromFirebase() {
+    return db.collection('guestEntries')
+        .orderBy('date', 'desc')
+        .get()
+        .then(snapshot => {
+            const entries = [];
+            snapshot.forEach(doc => {
+                entries.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            return entries;
+        });
 }
 
-// Function to save guest entries to localStorage
-function saveGuestEntriesToStorage(entries) {
-    localStorage.setItem('guestEntries', JSON.stringify(entries));
+// Function to add a guest entry to Firebase
+function addGuestEntryToFirebase(entry) {
+    return db.collection('guestEntries').add(entry);
 }
 
 function createGuestBookSection() {
@@ -904,83 +977,6 @@ function addGuestBookCSS() {
         #guestbook-form button:hover {
             background-color: #732d91;
         }
-        
-        /* Quiz Leaderboard Styles */
-        .quiz-leaderboard {
-            margin-top: 2rem;
-            background-color: #f8f4ff;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
-        }
-
-        .quiz-leaderboard h3 {
-            text-align: center;
-            margin-bottom: 1rem;
-            color: #8e44ad;
-        }
-
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .leaderboard-table th,
-        .leaderboard-table td {
-            padding: 0.8rem;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .leaderboard-table th {
-            background-color: #e6d7f2;
-            color: #8e44ad;
-            font-weight: bold;
-        }
-
-        .leaderboard-table tr:nth-child(even) {
-            background-color: #f9f5ff;
-        }
-
-        .leaderboard-table tr:hover {
-            background-color: #f0e6f6;
-        }
-
-        .leaderboard-rank {
-            font-weight: bold;
-            width: 60px;
-        }
-
-        .leaderboard-name {
-            text-align: left;
-        }
-
-        .leaderboard-score {
-            font-weight: bold;
-            color: #8e44ad;
-        }
-
-        .leaderboard-date {
-            color: #777;
-            font-size: 0.9rem;
-        }
-
-        .quiz-name-input {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .quiz-name-input label {
-            font-weight: bold;
-        }
-
-        .quiz-name-input input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
     `;
     
     document.head.appendChild(style);
@@ -1032,7 +1028,7 @@ function loadGuestEntries(entries) {
     });
 }
 
-function setupGuestBookForm(entries) {
+function setupGuestBookForm() {
     const guestBookForm = document.getElementById('guestbook-form');
     if (!guestBookForm) return; // Safety check
     
@@ -1050,20 +1046,29 @@ function setupGuestBookForm(entries) {
         const message = messageInput.value;
         const date = new Date().toISOString().split('T')[0];
         
-        // Add the new entry to the entries array
-        entries.unshift({ name, location, date, message });
+        // Create entry object
+        const entry = { name, location, date, message };
         
-        // Save entries to localStorage
-        saveGuestEntriesToStorage(entries);
-        
-        // Clear the form
-        guestBookForm.reset();
-        
-        // Reload the entries
-        loadGuestEntries(entries);
-        
-        // Show confirmation
-        alert('Thank you for signing the guest book!');
+        // Add entry to Firebase
+        addGuestEntryToFirebase(entry)
+            .then(() => {
+                // Clear the form
+                guestBookForm.reset();
+                
+                // Reload entries from Firebase
+                return loadGuestEntriesFromFirebase();
+            })
+            .then(entries => {
+                // Display the updated entries
+                loadGuestEntries(entries);
+                
+                // Show confirmation
+                alert('Thank you for signing the guest book!');
+            })
+            .catch(error => {
+                console.error("Error adding entry to guest book: ", error);
+                alert('There was an error adding your entry. Please try again.');
+            });
     });
 }
 
@@ -1102,6 +1107,24 @@ function addGuestBookNavItem() {
     }
 }
 
+// Setup real-time updates for guest book entries
+function setupGuestBookRealTimeUpdates() {
+    db.collection('guestEntries')
+        .orderBy('date', 'desc')
+        .onSnapshot(snapshot => {
+            const entries = [];
+            snapshot.forEach(doc => {
+                entries.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            loadGuestEntries(entries);
+        }, error => {
+            console.error("Error setting up real-time guest book updates:", error);
+        });
+}
             
 
 // 50 Facts About Mom
@@ -1933,7 +1956,7 @@ function addHistoryNavItem() {
     }
 }
 
-// Word Cloud Functionality
+// Word Cloud Functionality with Firebase Integration
 function setupWordCloud() {
     // Check if D3 is available
     if (!window.d3) {
@@ -1949,74 +1972,124 @@ function setupWordCloud() {
     const wordCloudForm = document.getElementById('wordcloud-form');
     if (!wordCloudForm) return;
     
-    // Load words from localStorage or use sample words
-    let words = loadWordsFromStorage();
-    
-    // If no words in storage, use sample ones
-    if (words.length === 0) {
-        words = [
-            { text: "Loving", size: 70, contributor: "Dad" },
-            { text: "Kind", size: 60, contributor: "Sarah" },
-            { text: "Creative", size: 55, contributor: "Mike" },
-            { text: "Thoughtful", size: 50, contributor: "Aunt Jane" },
-            { text: "Funny", size: 65, contributor: "Uncle Bob" },
-            { text: "Caring", size: 45, contributor: "Grandma" },
-            { text: "Smart", size: 55, contributor: "Cousin Tom" },
-            { text: "Generous", size: 50, contributor: "Friends" },
-            { text: "Patient", size: 45, contributor: "Neighbor" },
-            { text: "Strong", size: 60, contributor: "Coworker" },
-            { text: "Beautiful", size: 55, contributor: "Sister" },
-            { text: "Inspiring", size: 50, contributor: "Teacher" },
-            { text: "Supportive", size: 65, contributor: "Brother" },
-            { text: "Dedicated", size: 45, contributor: "Boss" },
-            { text: "Talented", size: 50, contributor: "Friend" }
-        ];
-        
-        // Save to localStorage
-        saveWordsToStorage(words);
-    }
-    
-    // Generate the word cloud
-    generateWordCloud(words, cloudContainer);
-    
-    // Handle form submission
-    wordCloudForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const nameInput = document.getElementById('contributor-name');
-        const wordInput = document.getElementById('word-input');
-        
-        if (!nameInput || !wordInput) return;
-        
-        const name = nameInput.value.trim();
-        const word = wordInput.value.trim();
-        
-        if (name && word) {
-            // Add new word
-            const newWord = {
-                text: word.charAt(0).toUpperCase() + word.slice(1), // Capitalize first letter
-                size: Math.floor(Math.random() * 30) + 40, // Random size between 40-70
-                contributor: name
-            };
+    // Load words from Firebase
+    loadWordsFromFirebase().then(words => {
+        // If no words in Firebase, use sample words
+        if (words.length === 0) {
+            const sampleWords = [
+                { text: "Loving", contributor: "Dad" },
+                { text: "Kind", contributor: "Sarah" },
+                { text: "Creative", contributor: "Mike" },
+                { text: "Thoughtful", contributor: "Aunt Jane" },
+                { text: "Funny", contributor: "Uncle Bob" },
+                { text: "Caring", contributor: "Grandma" },
+                { text: "Smart", contributor: "Cousin Tom" },
+                { text: "Generous", contributor: "Friends" },
+                { text: "Patient", contributor: "Neighbor" },
+                { text: "Strong", contributor: "Coworker" },
+                { text: "Beautiful", contributor: "Sister" },
+                { text: "Inspiring", contributor: "Teacher" },
+                { text: "Supportive", contributor: "Brother" },
+                { text: "Dedicated", contributor: "Boss" },
+                { text: "Talented", contributor: "Friend" }
+            ];
             
-            words.push(newWord);
-            
-            // Save to localStorage
-            saveWordsToStorage(words);
-            
-            // Regenerate the word cloud
-            generateWordCloud(words, cloudContainer);
-            
-            // Clear form
-            wordCloudForm.reset();
-            
-            // Show confirmation
-            alert('Thank you for adding your word!');
+            // Add sample words to Firebase
+            const promises = sampleWords.map(word => addWordToFirebase(word));
+            return Promise.all(promises).then(() => loadWordsFromFirebase());
         }
+        
+        return words;
+    }).then(words => {
+        // Group similar words and calculate sizes based on frequency
+        const processedWords = processWordsForCloud(words);
+        
+        // Generate the word cloud
+        generateWordCloud(processedWords, cloudContainer);
+        
+        // Handle form submission
+        wordCloudForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('contributor-name');
+            const wordInput = document.getElementById('word-input');
+            
+            if (!nameInput || !wordInput) return;
+            
+            const name = nameInput.value.trim();
+            const word = wordInput.value.trim();
+            
+            if (name && word) {
+                // Add new word
+                const newWord = {
+                    text: word.charAt(0).toUpperCase() + word.slice(1), // Capitalize first letter
+                    contributor: name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                // Add to Firebase
+                addWordToFirebase(newWord)
+                    .then(() => {
+                        // Clear form
+                        wordCloudForm.reset();
+                        
+                        // Show confirmation
+                        alert('Thank you for adding your word!');
+                        
+                        // The cloud will update automatically via the onSnapshot listener
+                    })
+                    .catch(error => {
+                        console.error("Error adding word:", error);
+                        alert('There was an error adding your word. Please try again.');
+                    });
+            }
+        });
+        
+        // Add navigation item
+        addWordCloudNavItem();
+        
+        // Setup real-time updates
+        setupWordCloudRealTimeUpdates(cloudContainer);
+    }).catch(error => {
+        console.error("Error setting up word cloud:", error);
+    });
+}
+
+// Function to process words for the cloud - group similar words and size them by frequency
+function processWordsForCloud(words) {
+    // Group words by text (case insensitive)
+    const wordGroups = {};
+    
+    words.forEach(word => {
+        const text = word.text.toLowerCase();
+        if (!wordGroups[text]) {
+            wordGroups[text] = {
+                text: word.text, // Keep original capitalization of the first occurrence
+                count: 0,
+                contributors: []
+            };
+        }
+        wordGroups[text].count++;
+        wordGroups[text].contributors.push(word.contributor);
     });
     
-    // Add navigation item
-    addWordCloudNavItem();
+    // Convert to array suitable for the cloud
+    const processedWords = Object.values(wordGroups).map(group => {
+        // Base size on count - starts at 40 for a single occurrence and grows by 10 for each additional
+        const size = 40 + (group.count - 1) * 10;
+        
+        return {
+            text: group.text,
+            size: Math.min(size, 100), // Cap size at 100
+            count: group.count,
+            // Join all contributors or show count if there are many
+            contributor: group.contributors.length <= 3 
+                ? group.contributors.join(', ') 
+                : `${group.contributors.length} people`
+        };
+    });
+    
+    return processedWords;
 }
 
 function generateWordCloud(words, container) {
@@ -2081,7 +2154,12 @@ function generateWordCloud(words, container) {
                     .duration(200)
                     .style('opacity', 0.9);
                 
-                tooltip.html('Added by: ' + d.contributor)
+                let tooltipText = 'Added by: ' + d.contributor;
+                if (d.count > 1) {
+                    tooltipText += ' • Mentioned ' + d.count + ' times';
+                }
+                
+                tooltip.html(tooltipText)
                     .style('left', (d3.event.pageX + 10) + 'px')
                     .style('top', (d3.event.pageY - 28) + 'px');
             })
@@ -2095,13 +2173,29 @@ function generateWordCloud(words, container) {
     }
 }
 
-function loadWordsFromStorage() {
-    const savedWords = localStorage.getItem('wordCloudWords');
-    return savedWords ? JSON.parse(savedWords) : [];
+// Function to load words from Firebase
+function loadWordsFromFirebase() {
+    return db.collection('wordCloudWords')
+        .get()
+        .then(snapshot => {
+            const words = [];
+            snapshot.forEach(doc => {
+                words.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            return words;
+        });
 }
 
-function saveWordsToStorage(words) {
-    localStorage.setItem('wordCloudWords', JSON.stringify(words));
+// Function to add a word to Firebase
+function addWordToFirebase(word) {
+    // Make sure there's a timestamp
+    if (!word.createdAt) {
+        word.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    }
+    return db.collection('wordCloudWords').add(word);
 }
 
 function addWordCloudNavItem() {
@@ -2143,6 +2237,54 @@ function addWordCloudNavItem() {
     }
 }
 
+// Setup real-time updates for the word cloud
+function setupWordCloudRealTimeUpdates(container) {
+    db.collection('wordCloudWords')
+        .onSnapshot(snapshot => {
+            const words = [];
+            snapshot.forEach(doc => {
+                words.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            // Process words to group similar ones and adjust sizes
+            const processedWords = processWordsForCloud(words);
+            
+            // Only regenerate the cloud if we have words
+            if (processedWords.length > 0) {
+                generateWordCloud(processedWords, container);
+            }
+        }, error => {
+            console.error("Error setting up real-time word cloud:", error);
+        });
+}
+
+// Add custom CSS for the tooltip
+function addWordCloudCSS() {
+    // Check if the styles are already added
+    if (document.querySelector('style#wordcloud-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'wordcloud-styles';
+    style.textContent = `
+        .word-tooltip {
+            position: absolute;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 100;
+            transition: opacity 0.3s;
+        }
+    `;
+    
+    document.head.appendChild(style);
+}
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Check auth first
@@ -2153,60 +2295,138 @@ document.addEventListener('DOMContentLoaded', function() {
         addLogoutButton();
     }
     
-    // Setup theme toggle first so styles apply properly
-    setupThemeToggle();
-    
-    // Sample data - you would replace these with your actual content
-    const photos = [
-        { src: 'https://source.unsplash.com/random/800x600/?family,1', caption: 'Family vacation 2010' },
-        { src: 'https://source.unsplash.com/random/800x600/?mother,2', caption: 'Mom\'s graduation' },
-        { src: 'https://source.unsplash.com/random/800x600/?birthday,3', caption: 'Mom\'s 40th birthday' },
-        { src: 'https://source.unsplash.com/random/800x600/?family,4', caption: 'Christmas 2018' },
-        { src: 'https://source.unsplash.com/random/800x600/?mother,5', caption: 'Mom and me' },
-        { src: 'https://source.unsplash.com/random/800x600/?family,6', caption: 'Family reunion' },
-        { src: 'https://source.unsplash.com/random/800x600/?mother,7', caption: 'Mom\'s garden' },
-        { src: 'https://source.unsplash.com/random/800x600/?birthday,8', caption: 'Surprise party' }
-    ];
+    // Initialize Firebase
+    try {
+        initializeFirebase();
+        
+        // Setup theme toggle first so styles apply properly
+        setupThemeToggle();
+        
+        // Sample data - you would replace these with your actual content
+        const photos = [
+            { src: 'https://source.unsplash.com/random/800x600/?family,1', caption: 'Family vacation 2010' },
+            { src: 'https://source.unsplash.com/random/800x600/?mother,2', caption: 'Mom\'s graduation' },
+            { src: 'https://source.unsplash.com/random/800x600/?birthday,3', caption: 'Mom\'s 40th birthday' },
+            { src: 'https://source.unsplash.com/random/800x600/?family,4', caption: 'Christmas 2018' },
+            { src: 'https://source.unsplash.com/random/800x600/?mother,5', caption: 'Mom and me' },
+            { src: 'https://source.unsplash.com/random/800x600/?family,6', caption: 'Family reunion' },
+            { src: 'https://source.unsplash.com/random/800x600/?mother,7', caption: 'Mom\'s garden' },
+            { src: 'https://source.unsplash.com/random/800x600/?birthday,8', caption: 'Surprise party' }
+        ];
 
-    const messages = [
-        { name: 'Dad', date: '2023-01-15', text: 'Happy birthday to the most amazing woman I know. Thank you for all these wonderful years together!' },
-        { name: 'Sarah', date: '2023-01-14', text: 'Mom, you\'ve always been my rock and inspiration. Wishing you the happiest birthday!' },
-        { name: 'Uncle Bob', date: '2023-01-13', text: 'Cheers to 50 incredible years! You\'ve always been the life of the party. Hope your day is as special as you are.' }
-    ];
+        const videos = [
+            { title: 'Birthday Wishes', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+            { title: 'Family Trip Memories', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+        ];
 
-    const videos = [
-        { title: 'Birthday Wishes', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-        { title: 'Family Trip Memories', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
-    ];
+        const timelineEvents = [
+            { date: '1975', text: 'Born in Springfield', image: 'https://source.unsplash.com/random/800x600/?baby,1' },
+            { date: '1993', text: 'Graduated from college', image: 'https://source.unsplash.com/random/800x600/?graduation,2' },
+            { date: '1997', text: 'Got married', image: 'https://source.unsplash.com/random/800x600/?wedding,3' },
+            { date: '1999', text: 'Had her first child', image: 'https://source.unsplash.com/random/800x600/?baby,4' },
+            { date: '2005', text: 'Started her dream career', image: 'https://source.unsplash.com/random/800x600/?office,5' },
+            { date: '2015', text: 'Family trip to Europe', image: 'https://source.unsplash.com/random/800x600/?europe,6' },
+            { date: '2025', text: 'Celebrating 50 amazing years!', image: 'https://source.unsplash.com/random/800x600/?celebration,7' }
+        ];
 
-    const timelineEvents = [
-        { date: '1975', text: 'Born in Springfield', image: 'https://source.unsplash.com/random/800x600/?baby,1' },
-        { date: '1993', text: 'Graduated from college', image: 'https://source.unsplash.com/random/800x600/?graduation,2' },
-        { date: '1997', text: 'Got married', image: 'https://source.unsplash.com/random/800x600/?wedding,3' },
-        { date: '1999', text: 'Had her first child', image: 'https://source.unsplash.com/random/800x600/?baby,4' },
-        { date: '2005', text: 'Started her dream career', image: 'https://source.unsplash.com/random/800x600/?office,5' },
-        { date: '2015', text: 'Family trip to Europe', image: 'https://source.unsplash.com/random/800x600/?europe,6' },
-        { date: '2025', text: 'Celebrating 50 amazing years!', image: 'https://source.unsplash.com/random/800x600/?celebration,7' }
-    ];
-
-    // Initialize all components
-    loadGallery(photos);
-    loadMessages(messages);
-    loadVideos(videos);
-    loadTimeline(timelineEvents);
-    setupMessageForm(messages);
-    setupModal();
-    setupSmoothScrolling();
-    createCountdown();
-    setupQuiz();
-    setupHeroSlideshow();
-    celebrateWithConfetti();
-    setupGuestBook();
-    
-    // Initialize new features
-    setup50Facts();
-    setupBirthdayCard();
-    setupMomsFavorites();
-    setupThisDayInHistory();
-    setupWordCloud();
+        // Initialize all components
+        loadGallery(photos);
+        loadVideos(videos);
+        loadTimeline(timelineEvents);
+        setupModal();
+        setupSmoothScrolling();
+        createCountdown();
+        setupHeroSlideshow();
+        celebrateWithConfetti();
+        
+        // Firebase-integrated components
+        setupQuiz();                    // Quiz with Firebase
+        setupGuestBook();               // Guest Book with Firebase
+        setup50Facts();                 // 50 Facts about Mom with Firebase
+        setupBirthdayCard();            // Birthday Card with Firebase
+        setupMomsFavorites();           // Mom's Favorites with Firebase
+        setupThisDayInHistory();        // This Day in History with Firebase
+        setupWordCloud();               // Word Cloud with Firebase
+        addWordCloudCSS();              // Add word cloud tooltip styles
+        
+        // Set up real-time updates for all components
+        setupRealtimeUpdates();
+    } catch (error) {
+        console.error("Error initializing the application:", error);
+        alert("There was an error initializing the application. Please reload the page and try again.");
+    }
 });
+
+// Setup all real-time updates in one function
+function setupRealtimeUpdates() {
+    // Messages real-time updates
+    db.collection('messages')
+        .orderBy('date', 'desc')
+        .onSnapshot(snapshot => {
+            const messages = [];
+            snapshot.forEach(doc => {
+                messages.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            loadMessages(messages);
+        }, error => {
+            console.error("Error setting up real-time messages:", error);
+        });
+
+    // Guest Book real-time updates
+    setupGuestBookRealTimeUpdates();
+    
+    // Quiz Leaderboard real-time updates
+    setupLeaderboardRealTimeUpdates();
+    
+    // Birthday Card real-time updates
+    db.collection('birthdayCardSignatures')
+        .orderBy('createdAt', 'asc')
+        .onSnapshot(snapshot => {
+            const signatures = [];
+            snapshot.forEach(doc => {
+                signatures.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            const signatureContainer = document.getElementById('card-signatures');
+            if (signatureContainer) {
+                displaySignatures(signatures, signatureContainer);
+            }
+        }, error => {
+            console.error("Error setting up real-time signatures:", error);
+        });
+    
+    // Word Cloud real-time updates
+    const cloudContainer = document.getElementById('wordcloud-canvas');
+    if (cloudContainer) {
+        setupWordCloudRealTimeUpdates(cloudContainer);
+    }
+    
+    // Theme settings real-time updates
+    db.collection('siteSettings').doc('theme')
+        .onSnapshot(doc => {
+            if (doc.exists) {
+                const theme = doc.data();
+                const themeButtons = document.querySelectorAll('.theme-button');
+                
+                if (theme && theme.name) {
+                    applyTheme(theme.name);
+                    
+                    // Update active button
+                    themeButtons.forEach(button => {
+                        if (button.getAttribute('data-theme') === theme.name) {
+                            button.classList.add('active');
+                        } else {
+                            button.classList.remove('active');
+                        }
+                    });
+                }
+            }
+        }, error => {
+            console.error("Error setting up theme updates:", error);
+        });
+}

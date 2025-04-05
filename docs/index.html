@@ -41,22 +41,6 @@
             </div>
         </section>
 
-        <!-- Messages Section -->
-        <section id="messages" class="section">
-            <h2><i class="fas fa-envelope-open-text"></i> Messages</h2>
-            <div class="messages-container">
-                <!-- Messages will be added here -->
-            </div>
-            <div class="add-message">
-                <h3>Add Your Message</h3>
-                <form id="message-form">
-                    <input type="text" id="name" placeholder="Your Name" required>
-                    <textarea id="message" placeholder="Your Message to Mom" required></textarea>
-                    <button type="submit">Send Message <i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
-        </section>
-
         <!-- Add this section to your index.html, before the closing </main> tag -->
         <section id="birthday-card" class="section">
             <h2><i class="fas fa-birthday-cake"></i> Virtual Birthday Card</h2>
@@ -257,7 +241,8 @@
     <script src="script.js"></script>
 
 
-    <script type="module">
+    <!-- <script type="module">
+    
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
@@ -279,6 +264,31 @@
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
+    </script> -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCB3EScu-9eEn4jM9gvsWAxL9bo7Yy4dI4",
+        authDomain: "mom-birthday-scrapbook.firebaseapp.com",
+        projectId: "mom-birthday-scrapbook",
+        storageBucket: "mom-birthday-scrapbook.firebasestorage.app",
+        messagingSenderId: "582973664952",
+        appId: "1:582973664952:web:9d3cd23472af9c62124e4d",
+        measurementId: "G-YG6BJLLX8L"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
     </script>
+
+    
 </body>
 </html>
