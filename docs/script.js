@@ -12,6 +12,7 @@ function initializeFirebase() {
     console.log("Firebase initialized successfully");
 }
 
+initializeFirebase();
 
 // Password Protection Functions
 function checkAuth() {
