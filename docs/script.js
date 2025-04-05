@@ -186,6 +186,82 @@ function createCountdown() {
 
 // Quiz Functionality
 
+function formatDate(dateString) {
+    // Convert date string to a more readable format
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // Uses local date format
+}
+
+function displayLeaderboard(container, leaderboard) {
+    console.log("leaderboard visual")
+    if (!container) return; // Safety check
+    
+    // Create leaderboard element
+    const leaderboardElement = document.createElement('div');
+    leaderboardElement.className = 'quiz-leaderboard';
+    
+    // Create leaderboard header
+    const leaderboardHeader = document.createElement('h3');
+    leaderboardHeader.textContent = 'Quiz Leaderboard';
+    
+    // Create leaderboard table
+    const leaderboardTable = document.createElement('table');
+    leaderboardTable.className = 'leaderboard-table';
+    
+    // Create table header
+    const tableHeader = document.createElement('thead');
+    tableHeader.innerHTML = `
+        <tr>
+            <th class="leaderboard-rank">Rank</th>
+            <th class="leaderboard-name">Name</th>
+            <th class="leaderboard-score">Score</th>
+            <th class="leaderboard-date">Date</th>
+        </tr>
+    `;
+    
+    // Create table body
+    const tableBody = document.createElement('tbody');
+    
+    // Add entries to table
+    leaderboard.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="leaderboard-rank">${index + 1}</td>
+            <td class="leaderboard-name">${entry.name}</td>
+            <td class="leaderboard-score">${entry.score}%</td>
+            <td class="leaderboard-date">${formatDate(entry.date)}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+    
+    // Assemble the leaderboard
+    leaderboardTable.appendChild(tableHeader);
+    leaderboardTable.appendChild(tableBody);
+    leaderboardElement.appendChild(leaderboardHeader);
+    leaderboardElement.appendChild(leaderboardTable);
+    
+    // Add to the container
+    container.appendChild(leaderboardElement);
+}
+
+function addLeaderboardEntryToFirebase(entry) {
+    return db.collection('quizLeaderboard').add(entry);
+}
+
+function loadLeaderboardFromFirebase() {
+    console.log("leaderboard from firebase called")
+    return db.collection('quizLeaderboard')
+        .orderBy('score', 'desc')
+        .get()
+        .then(snapshot => {
+            const leaderboard = [];
+            snapshot.forEach(doc => {
+                leaderboard.push(doc.data());
+            });
+            return leaderboard;
+        });
+}
+
 function setupQuiz() {
     // Sample quiz questions - replace with real questions about your mom
     const quizQuestions = [
@@ -234,6 +310,7 @@ function setupQuiz() {
     
     // Load leaderboard from Firebase and display it
     loadLeaderboardFromFirebase().then(leaderboard => {
+        console.log("Load leaderboard from Firebase and display it")
         // Display leaderboard only once at the start
         displayLeaderboard(quizContainer, leaderboard);
         
@@ -403,6 +480,7 @@ function setupQuiz() {
             }
         }
     }).catch(error => {
+        console.log("catch block")
         console.error("Error loading leaderboard: ", error);
         // If there's an error, use sample data
         const leaderboard = [
@@ -1234,6 +1312,7 @@ function setupBirthdayCard() {
     
     // Display signatures
     displaySignatures(signatures, signatureContainer);
+    console.log('signture ---- ' + signatures)
     
     // Toggle card open/close
     card.addEventListener('click', function() {
@@ -2289,6 +2368,29 @@ document.addEventListener('DOMContentLoaded', function() {
         alert("There was an error initializing the application. Please reload the page and try again.");
     }
 });
+
+function setupLeaderboardRealTimeUpdates() {
+    console.log("setupLeaderboardRealTimeUpdates")
+    db.collection('quizLeaderboard')
+        .orderBy('score', 'desc')
+        .onSnapshot(snapshot => {
+            const leaderboard = [];
+            snapshot.forEach(doc => {
+                leaderboard.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            // const quizContainer = document.querySelector('.quiz-container');
+            // if (quizContainer && quizContainer.querySelector('.quiz-leaderboard')) {
+            //     // Only update the leaderboard if it's currently displayed (not during a quiz)
+            //     displayLeaderboard(quizContainer, leaderboard);
+            // }
+        }, error => {
+            console.error("Error setting up real-time leaderboard:", error);
+        });
+}
 
 // Setup all real-time updates in one function
 function setupRealtimeUpdates() {
