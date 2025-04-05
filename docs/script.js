@@ -463,15 +463,22 @@ function setupQuiz() {
                     
                     // Save to Firebase
                     addLeaderboardEntryToFirebase(newEntry).then(() => {
-                        alert('Your score has been added to the leaderboard!');
-                        
-                        // Show just a nice message
+                        // Clear the container
                         quizContainer.innerHTML = '';
-                        const messageElement = document.createElement('p');
-                        messageElement.textContent = 'See if someone else can beat your score!';
-                        messageElement.style.textAlign = 'center';
-                        messageElement.style.marginTop = '1rem';
-                        quizContainer.appendChild(messageElement);
+                        
+                        // Show success message
+                        const successMessage = document.createElement('p');
+                        successMessage.textContent = 'Your score has been added to the leaderboard!';
+                        successMessage.style.textAlign = 'center';
+                        successMessage.style.marginBottom = '1rem';
+                        quizContainer.appendChild(successMessage);
+                        
+                        // Load and display the updated leaderboard
+                        loadLeaderboardFromFirebase().then(leaderboard => {
+                            displayLeaderboard(quizContainer, leaderboard);
+                        }).catch(error => {
+                            console.error("Error loading leaderboard:", error);
+                        });
                     }).catch(error => {
                         console.error("Error adding score to leaderboard: ", error);
                         alert('There was an error saving your score. Please try again.');
@@ -2382,11 +2389,16 @@ function setupLeaderboardRealTimeUpdates() {
                 });
             });
             
-            // const quizContainer = document.querySelector('.quiz-container');
-            // if (quizContainer && quizContainer.querySelector('.quiz-leaderboard')) {
-            //     // Only update the leaderboard if it's currently displayed (not during a quiz)
-            //     displayLeaderboard(quizContainer, leaderboard);
-            // }
+            const quizContainer = document.querySelector('.quiz-container');
+            const existingLeaderboard = quizContainer.querySelector('.quiz-leaderboard');
+            
+            // Only update if there's an existing leaderboard (not during initial load)
+            if (quizContainer && existingLeaderboard) {
+                // Remove the existing leaderboard first
+                existingLeaderboard.remove();
+                // Then display the updated one
+                displayLeaderboard(quizContainer, leaderboard);
+            }
         }, error => {
             console.error("Error setting up real-time leaderboard:", error);
         });
