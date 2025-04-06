@@ -668,22 +668,27 @@ function loadGallery(photos) {
             gap: 20px;
             margin-top: 20px;
         }
-        
-        .pagination-button {
-            padding: 8px 16px;
-            background: #f0f0f0;
+
+        .facts-nav-button {
+            background-color: #8e44ad;
+            color: white;
             border: none;
-            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background-color 0.3s;
         }
-        
-        .pagination-button:hover {
-            background: #e0e0e0;
+
+        .facts-nav-button:hover {
+            background-color: #732d91;
         }
-        
-        .pagination-button:disabled {
-            opacity: 0.5;
+
+        .facts-nav-button:disabled {
+            background-color: #d0b6e0;
             cursor: not-allowed;
         }
         
@@ -729,12 +734,12 @@ function loadGallery(photos) {
     paginationControls.className = 'pagination-controls';
     
     const prevButton = document.createElement('button');
-    prevButton.className = 'pagination-button prev';
-    prevButton.innerHTML = '❮ Previous';
+    prevButton.className = 'facts-nav-button';
+    prevButton.innerHTML = '<i class="fas fa-arrow-left"></i>';
     
     const nextButton = document.createElement('button');
-    nextButton.className = 'pagination-button next';
-    nextButton.innerHTML = 'Next ❯';
+    nextButton.className = 'facts-nav-button';
+    nextButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
     
     const pageInfo = document.createElement('span');
     pageInfo.className = 'page-info';
@@ -1326,26 +1331,26 @@ function setupGuestBookRealTimeUpdates() {
 function setup50Facts() {
     // Array of 50 facts about Mom - replace these with real facts!
     const momFacts = [
-        "She’s a graceful dancer, trained in classical dance during her childhood.",
+        "She's a graceful dancer, trained in classical dance during her childhood.",
     "She mastered cooking after marriage and now whips up the most delicious meals.",
-    "Books are her forever love — she can’t resist a good story.",
+    "Books are her forever love — she can't resist a good story.",
     "Sev Mamra is her favorite snack — a day without it feels incomplete.",
     "She topped her class in 10th grade and made it look easy.",
     "She loves watching movies and binging on OTT series.",
-    "As a child, she loved playing ‘teacher - teacher’ and running her own little classroom.",
-    "Her day doesn’t start (or end) without a comforting cup of chai.",
-    "She’s incredibly generous, always ready to lend a hand or a smile.",
-    "She once met Hrithik Roshan at his home — a story she’ll never forget.",
+    "As a child, she loved playing 'teacher - teacher' and running her own little classroom.",
+    "Her day doesn't start (or end) without a comforting cup of chai.",
+    "She's incredibly generous, always ready to lend a hand or a smile.",
+    "She once met Hrithik Roshan at his home — a story she'll never forget.",
     "Nothing beats her love for Cadbury Dairy Milk chocolates.",
     "Her afternoon naps are non-negotiable — her favorite little escape.",
-    "She’s the family’s undercover roaster, armed with quick wit and humor.",
+    "She's the family's undercover roaster, armed with quick wit and humor.",
     "She hums and sings while working around the house, filling it with music.",
-    "She’s the quiet, steady support behind every family success.",
+    "She's the quiet, steady support behind every family success.",
     "She has a magical ability to find anything that's lost at home.",
     "She loves flowers and anything with a soft, floral design.",
     "A crispy, crunchy papad is her idea of the perfect side dish.",
     "She remembers every birthday, anniversary, and special day — no reminders needed.",
-    "At 50, she’s young at heart, full of life, and absolutely fabulous."
+    "At 50, she's young at heart, full of life, and absolutely fabulous."
     ];
 
     const factsGrid = document.getElementById('facts-grid');
@@ -1988,7 +1993,7 @@ function setupThisDayInHistory() {
         },
         {
             category: "Sports",
-            title: "India’s Cricket Captain",
+            title: "India's Cricket Captain",
             description: "Mansoor Ali Khan Pataudi had recently retired, and India was preparing for a new cricketing era."
         },
         {
@@ -2018,7 +2023,7 @@ function setupThisDayInHistory() {
         },
         {
             category: "Science",
-            title: "India’s Space Dreams",
+            title: "India's Space Dreams",
             description: "ISRO was laying the foundation for India's first satellite launch, with Aryabhata set to launch in 1975."
         },
         {
