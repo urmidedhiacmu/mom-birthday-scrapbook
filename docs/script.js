@@ -106,6 +106,74 @@ function createCountdown() {
     // Create countdown element in the header
     const titleContainer = document.querySelector('.title-container');
     if (!titleContainer) return; // Safety check
+    
+    const countdownContainer = document.createElement('div');
+    countdownContainer.className = 'countdown-container';
+    
+    const countdownTitle = document.createElement('p');
+    countdownTitle.className = 'countdown-title';
+    countdownTitle.textContent = 'Countdown to the big day:';
+    
+    const countdownTimer = document.createElement('div');
+    countdownTimer.className = 'countdown-timer';
+    countdownTimer.innerHTML = `
+        <div class="countdown-item">
+            <span id="countdown-days">00</span>
+            <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-item">
+            <span id="countdown-hours">00</span>
+            <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-item">
+            <span id="countdown-minutes">00</span>
+            <span class="countdown-label">Minutes</span>
+        </div>
+        <div class="countdown-item">
+            <span id="countdown-seconds">00</span>
+            <span class="countdown-label">Seconds</span>
+        </div>
+    `;
+    
+    countdownContainer.appendChild(countdownTitle);
+    countdownContainer.appendChild(countdownTimer);
+    titleContainer.appendChild(countdownContainer);
+    
+    // Update the countdown every 1 second
+    const countdownFunction = setInterval(function() {
+        // Get today's date and time
+        const now = new Date().getTime();
+        
+        // Set the birthday date
+        const birthday = new Date(birthdayDate).getTime();
+        
+        // Find the distance between now and the birthday date
+        const distance = birthday - now;
+        
+        // If the birthday is in the past, show a celebration message
+        if (distance < 0) {
+            clearInterval(countdownFunction);
+            countdownTimer.innerHTML = '<div class="birthday-message">Happy 50th Birthday Jalpa! 🎉</div>';
+            return;
+        }
+        
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Display the result
+        const daysElement = document.getElementById("countdown-days");
+        const hoursElement = document.getElementById("countdown-hours");
+        const minutesElement = document.getElementById("countdown-minutes");
+        const secondsElement = document.getElementById("countdown-seconds");
+        
+        if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+        if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+        if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+        if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
 }
 
 // Quiz Functionality
@@ -190,29 +258,29 @@ function setupQuiz() {
     // Sample quiz questions - replace with real questions about your mom
     const quizQuestions = [
         {
-            question: "What is Mom's favorite color?",
+            question: "What is Jalpa's favorite color?",
             options: ["Blue", "Purple", "Red", "Green"],
-            correct: 1 // Purple (index 1)
+            correct: 0 // Purple (index 1)
         },
         {
-            question: "Where was Mom born?",
-            options: ["New York", "Chicago", "Los Angeles", "Boston"],
-            correct: 0 // New York (index 0)
+            question: "What did Jalpa do her Bachelor's in?",
+            options: ["Chemistry", "Physics", "Microbiology", "Botany"],
+            correct: 2 // New York (index 0)
         },
         {
-            question: "What is Mom's favorite food?",
-            options: ["Pizza", "Sushi", "Chocolate", "Pasta"],
+            question: "What is Jalpa's favorite flower?",
+            options: ["Lily", "Sunflower", "Tulip", "Rose"],
             correct: 3 // Pasta (index 3)
         },
         {
-            question: "What hobby has Mom enjoyed the longest?",
-            options: ["Gardening", "Reading", "Painting", "Cooking"],
+            question: "How did Jalpa meet Kalpesh?",
+            options: ["Through her parents", "Through her friend", "Through her neighbour", "Through her work"],
             correct: 1 // Reading (index 1)
         },
         {
-            question: "What's Mom's favorite holiday?",
-            options: ["Christmas", "Thanksgiving", "Birthday", "New Year"],
-            correct: 0 // Christmas (index 0)
+            question: "If Mom could design her dream space at home, what would it be?",
+            options: ["A craft corner for scrapbooking and DIY projects.", "A music room where she can sing and play instruments.", "A big, cozy library filled with books.", "A luxurious walk-in closet for all her outfits and jewelry."],
+            correct: 2 // Christmas (index 0)
         }
     ];
     
@@ -224,7 +292,7 @@ function setupQuiz() {
     const quizIntro = document.createElement('div');
     quizIntro.className = 'quiz-intro';
     quizIntro.innerHTML = `
-        <p>Test your knowledge about the birthday girl! Answer these questions and see how well you know Mom.</p>
+        <p>Test your knowledge about the birthday girl! Answer these questions and see how well you know Jalpa.</p>
         <button id="start-quiz" class="quiz-button">Start Quiz</button>
     `;
     
@@ -335,13 +403,13 @@ function setupQuiz() {
             // Determine message based on score
             let message;
             if (percentage >= 80) {
-                message = "Amazing! You really know Mom well!";
+                message = "Amazing! You really know Jalpa well!";
             } else if (percentage >= 60) {
-                message = "Good job! You know quite a bit about Mom.";
+                message = "Good job! You know quite a bit about Jalpa.";
             } else if (percentage >= 40) {
-                message = "Not bad, but there's more to learn about Mom!";
+                message = "Not bad, but there's more to learn about Jalpa!";
             } else {
-                message = "Time to get to know Mom better!";
+                message = "Time to get to know Jalpa better!";
             }
             
             // Create results element
@@ -815,41 +883,6 @@ function loadVideos(videos) {
     });
 }
 
-function loadTimeline(timelineEvents) {
-    const timelineContainer = document.querySelector('.timeline-container');
-    if (!timelineContainer) return; // Safety check
-
-    timelineContainer.innerHTML = ''; // Clear container first
-
-    timelineEvents.forEach((event, index) => {
-        const timelineItem = document.createElement('div');
-        timelineItem.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
-
-        const timelineContent = document.createElement('div');
-        timelineContent.className = 'timeline-content';
-
-        const timelineDate = document.createElement('div');
-        timelineDate.className = 'timeline-date';
-        timelineDate.textContent = event.date;
-
-        const timelineText = document.createElement('div');
-        timelineText.className = 'timeline-text';
-        timelineText.textContent = event.text;
-
-        const timelineImage = document.createElement('img');
-        timelineImage.className = 'timeline-image';
-        timelineImage.src = event.image;
-        timelineImage.alt = event.text;
-        timelineImage.loading = 'lazy';
-
-        timelineContent.appendChild(timelineDate);
-        timelineContent.appendChild(timelineText);
-        timelineContent.appendChild(timelineImage);
-        timelineItem.appendChild(timelineContent);
-
-        timelineContainer.appendChild(timelineItem);
-    });
-}
 
 function setupMessageForm(messages) {
     const messageForm = document.getElementById('message-form');
@@ -946,9 +979,9 @@ function setupGuestBook() {
             // If no entries in Firebase, use sample entries
             if (entries.length === 0) {
                 const sampleEntries = [
-                    { name: 'John Smith', location: 'New York', date: '2023-02-20', message: 'Happy 50th Birthday! Wishing you all the best on your special day.' },
-                    { name: 'Mary Johnson', location: 'Chicago', date: '2023-02-19', message: 'Such a beautiful tribute to your mom! Happy Birthday to her!' },
-                    { name: 'Robert Davis', location: 'Los Angeles', date: '2023-02-18', message: 'Congratulations on reaching this milestone. Have a wonderful celebration!' }
+                    // { name: 'John Smith', location: 'New York', date: '2023-02-20', message: 'Happy 50th Birthday! Wishing you all the best on your special day.' },
+                    // { name: 'Mary Johnson', location: 'Chicago', date: '2023-02-19', message: 'Such a beautiful tribute to your mom! Happy Birthday to her!' },
+                    // { name: 'Robert Davis', location: 'Los Angeles', date: '2023-02-18', message: 'Congratulations on reaching this milestone. Have a wonderful celebration!' }
                 ];
                 
                 // Add sample entries to Firebase
@@ -1298,7 +1331,7 @@ function setup50Facts() {
     "Books are her forever love — she can’t resist a good story.",
     "Sev Mamra is her favorite snack — a day without it feels incomplete.",
     "She topped her class in 10th grade and made it look easy.",
-    "She loves watching movies and bingeing on OTT series.",
+    "She loves watching movies and binging on OTT series.",
     "As a child, she loved playing ‘teacher - teacher’ and running her own little classroom.",
     "Her day doesn’t start (or end) without a comforting cup of chai.",
     "She’s incredibly generous, always ready to lend a hand or a smile.",
@@ -1584,149 +1617,150 @@ function setupMomsFavorites() {
     const favorites = {
         books: [
             {
-                title: "Pride and Prejudice",
-                subtitle: "Jane Austen",
-                description: "Mom's all-time favorite book that she's read at least 10 times.",
-                image: "https://source.unsplash.com/random/400x300/?book,classic",
+                title: "Pida rumal ni ganth",
+                subtitle: "Harkishan Mehta",
+                // description: "Mom's all-time favorite book that she's read at least 10 times.",
+                image: "https://m.media-amazon.com/images/I/81LYsrYDYSL._SL1500_.jpg",
                 link: "#"
             },
             {
-                title: "The Alchemist",
-                subtitle: "Paulo Coelho",
-                description: "She loves the inspirational journey and life lessons in this book.",
-                image: "https://source.unsplash.com/random/400x300/?book,journey",
+                title: "Rajadhiraj",
+                subtitle: "Kanhaiyalal Munshi",
+                // description: "She loves the inspirational journey and life lessons in this book.",
+                image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1472013195i/31663989.jpg",
                 link: "#"
             },
             {
-                title: "To Kill a Mockingbird",
-                subtitle: "Harper Lee",
-                description: "A book that made a lasting impression on her in high school.",
-                image: "https://source.unsplash.com/random/400x300/?book,classic",
+                title: "Gujarat No Nath",
+                subtitle: "Kanhaiyalal Munshi",
+                // description: "A book that made a lasting impression on her in high school.",
+                image: "https://m.media-amazon.com/images/I/A1e3Cdy51HL._AC_UF1000,1000_QL80_.jpg",
                 link: "#"
             },
             {
-                title: "The Secret Garden",
-                subtitle: "Frances Hodgson Burnett",
-                description: "Her favorite book from childhood that she still rereads.",
-                image: "https://source.unsplash.com/random/400x300/?garden,book",
+                title: "Pandar Mo Kheladi",
+                subtitle: "Tarak Mehta",
+                // description: "Her favorite book from childhood that she still rereads.",
+                image: "https://rrsheth.com/wp-content/uploads/2021/05/PANDAR-MO-KHELADI-FRONT.jpg",
                 link: "#"
             },
             {
-                title: "Becoming",
-                subtitle: "Michelle Obama",
-                description: "A recent favorite biography that inspired her.",
-                image: "https://source.unsplash.com/random/400x300/?book,biography",
+                title: "Tamara vina",
+                subtitle: "Geeta Manek",
+                // description: "A recent favorite biography that inspired her.",
+                image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1521138959i/39290713.jpg",
                 link: "#"
             }
         ],
         movies: [
             {
-                title: "The Sound of Music",
-                subtitle: "1965",
+                title: "Lagaan",
+                subtitle: "2001",
                 description: "She knows all the songs by heart and watches it every year.",
-                image: "https://source.unsplash.com/random/400x300/?mountains,music",
+                image: "https://resizing.flixster.com/oUharC_4Nor002q40jTwoY_pliw=/fit-in/1152x864/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p27923_v_h9_ad.jpg",
                 link: "#"
             },
             {
-                title: "Roman Holiday",
-                subtitle: "1953",
+                title: "Kal Ho Na Ho",
+                subtitle: "2003",
                 description: "Her favorite Audrey Hepburn film that she loves for its romance and setting.",
-                image: "https://source.unsplash.com/random/400x300/?rome,vacation",
+                image: "https://i.scdn.co/image/ab67616d0000b273a2055e0b847ff66fb5206099",
                 link: "#"
             },
             {
-                title: "Mamma Mia",
-                subtitle: "2008",
+                title: "Maine Pyar Kiya",
+                subtitle: "1989",
                 description: "Makes her laugh and sing along every time she watches it.",
-                image: "https://source.unsplash.com/random/400x300/?greece,beach",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJicldjTOMH2rxVqLEoEJj_0_u1Cq2IbAHqA&s",
                 link: "#"
             },
             {
-                title: "The Notebook",
-                subtitle: "2004",
+                title: "Chak De! India",
+                subtitle: "2007",
                 description: "Her go-to romantic film that always makes her cry.",
-                image: "https://source.unsplash.com/random/400x300/?romance,lake",
+                image: "https://resizing.flixster.com/bGe-UIhjnjCmygicDVVfK1NgiAA=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p168383_v_h9_ad.jpg",
                 link: "#"
             },
             {
-                title: "Little Women",
-                subtitle: "2019",
+                title: "Taare Zameen Par",
+                subtitle: "2007",
                 description: "A recent adaptation of one of her favorite stories.",
-                image: "https://source.unsplash.com/random/400x300/?vintage,family",
+                image: "https://www.robinage.com/wp-content/uploads/2023/03/tare-zameen-pr.jpg",
                 link: "#"
             }
         ],
         foods: [
             {
-                title: "Homemade Pasta",
-                subtitle: "Italian",
+                title: "Khandvi",
+                subtitle: "Gujarati",
                 description: "She makes the best homemade pasta from her grandmother's recipe.",
-                image: "https://source.unsplash.com/random/400x300/?pasta,homemade",
+                image: "https://d1uz88p17r663j.cloudfront.net/original/ff75422b53f60e10642b1df6e54f943d_Khandvi_with_sprouts_filling_Plating.jpg",
                 link: "#"
             },
             {
-                title: "Chocolate Cake",
-                subtitle: "Dessert",
+                title: "Pani Puri",
+                subtitle: "Chaat",
                 description: "Her birthday favorite that she requests every year.",
-                image: "https://source.unsplash.com/random/400x300/?chocolate,cake",
+                image: "https://cdn1.foodviva.com/static-content/food-images/snacks-recipes/pani-puri/pani-puri.jpg",
                 link: "#"
             },
             {
-                title: "Garden Salad",
-                subtitle: "Fresh",
+                title: "Puran Poli",
+                subtitle: "Maharashtrian",
                 description: "Made with vegetables from her own garden in summer.",
-                image: "https://source.unsplash.com/random/400x300/?salad,fresh",
+                image: "https://cookwithrenu.com/wp-content/uploads/2020/09/Puran-Poli_Featured-Image-500x375.jpg",
                 link: "#"
             },
             {
-                title: "Salmon",
-                subtitle: "Seafood",
+                title: "Maggi",
+                subtitle: "Instant",
                 description: "Her favorite healthy dinner option with herbs and lemon.",
-                image: "https://source.unsplash.com/random/400x300/?salmon,dinner",
+                image: "https://assets.bwbx.io/images/users/iqjWHBFdfxIU/iT_xbvVwICMg/v1/-1x-1.webp",
                 link: "#"
             },
             {
-                title: "Coffee",
-                subtitle: "Vanilla Latte",
+                title: "Undhiyu Puri",
+                subtitle: "Gujarati",
                 description: "Can't start her day without her favorite coffee blend.",
-                image: "https://source.unsplash.com/random/400x300/?coffee,latte",
+
+                image: "https://images.squarespace-cdn.com/content/v1/578753d7d482e9c3a909de40/1579156575782-L0AJ3T3RB6IDMMKPKSEP/1801_Indian_Undhiyu-015.jpg?format=2500w",
                 link: "#"
             }
         ],
         music: [
             {
-                title: "Fleetwood Mac",
-                subtitle: "1970s Rock",
+                title: "Kal Ho Naa Ho",
+                subtitle: "Kal Ho Naa Ho",
                 description: "The soundtrack of her college years that she still loves.",
-                image: "https://source.unsplash.com/random/400x300/?concert,vintage",
+                image: "https://images.indianexpress.com/2017/11/kal-ho-naa-ho-3.jpg",
                 link: "#"
             },
             {
-                title: "Piano Classics",
-                subtitle: "Mozart & Chopin",
+                title: "Kuch Kuch Hota Hai",
+                subtitle: "Kuch Kuch Hota Hai",
                 description: "What she plays when she needs to relax and unwind.",
-                image: "https://source.unsplash.com/random/400x300/?piano,classical",
+                image: "https://sc0.blr1.cdn.digitaloceanspaces.com/article/200274-pjpmrknjqq-1713971694.jpeg",
                 link: "#"
             },
             {
-                title: "ABBA",
-                subtitle: "Pop",
+                title: "Pehla Nasha",
+                subtitle: "Jo Jeeta Wohi Sikandar",
                 description: "Her go-to music for cleaning the house and dancing around.",
-                image: "https://source.unsplash.com/random/400x300/?disco,dancing",
+                image: "https://images.firstpost.com/wp-content/uploads/2022/01/pehla-nasha.jpg?im=FitAndFill=(1200,675)",
                 link: "#"
             },
             {
-                title: "Carole King",
-                subtitle: "Tapestry",
+                title: "Mere Mehboob Mere Sanam",
+                subtitle: "Duplicate",
                 description: "The album she knows every word to and sings along with.",
-                image: "https://source.unsplash.com/random/400x300/?vinyl,retro",
+                image: "https://i.ytimg.com/vi/p1kW-g6anYE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDKccVfDJ_dWI5UTXvgZO7SBn9Q5w",
                 link: "#"
             },
             {
-                title: "Beatles",
-                subtitle: "60s Classics",
+                title: "Aaye Ho Meri Zindagi Mein",
+                subtitle: "Raja Hindustani",
                 description: "Her first concert was a Beatles tribute band.",
-                image: "https://source.unsplash.com/random/400x300/?beatles,music",
+                image: "https://i.ytimg.com/vi/gfMwp_j6xR0/maxresdefault.jpg",
                 link: "#"
             }
         ]
@@ -1778,7 +1812,6 @@ function displayFavorites(category, favorites, container) {
             <div class="favorite-details">
                 <div class="favorite-title">${item.title}</div>
                 <div class="favorite-subtitle">${item.subtitle}</div>
-                <div class="favorite-description">${item.description}</div>
             </div>
         `;
         
@@ -2566,7 +2599,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize all components
         loadGallery(photos);
         loadVideos(videos);
-        loadTimeline(timelineEvents);
+        // loadTimeline(timelineEvents);
         setupModal();
         setupSmoothScrolling();
         createCountdown();
