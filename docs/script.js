@@ -575,7 +575,7 @@ function loadGallery(photos) {
     const categoryNav = document.createElement('div');
     categoryNav.className = 'category-nav';
     
-    const categories = ['All', 'Couple', 'Friends', 'Kids', 'Childhood'];
+    const categories = ['All', 'Couple', 'Friends', 'Kids'];
     let currentCategory = 'All';
 
     // Add category navigation styles
@@ -1000,7 +1000,7 @@ function setupGuestBook() {
             setupGuestBookForm();
             
             // Add to navigation menu
-            addGuestBookNavItem();
+            // addGuestBookNavItem();
         })
         .catch(error => {
             console.error("Error setting up guest book:", error);
@@ -1411,7 +1411,7 @@ function setup50Facts() {
     displayFacts();
     
     // Add navigation item to the main navigation
-    addFactsNavItem();
+    // addFactsNavItem();
 }
 
 function addFactsNavItem() {
@@ -1526,7 +1526,7 @@ function setupBirthdayCard() {
     // });
     
     // Add navigation item
-    addBirthdayCardNavItem();
+    // addBirthdayCardNavItem();
 }
 
 function displaySignatures(signatures, container) {
@@ -1790,7 +1790,7 @@ function setupMomsFavorites() {
     });
     
     // Add navigation item
-    addFavoritesNavItem();
+    // addFavoritesNavItem();
 }
 
 function displayFavorites(category, favorites, container) {
@@ -2033,7 +2033,7 @@ function setupThisDayInHistory() {
     displayHistoricalEvents(historicalEvents);
     
     // Add navigation item
-    addHistoryNavItem();
+    // addHistoryNavItem();
 }
 
 function displayHistoricalEvents(events) {
@@ -2191,7 +2191,7 @@ function setupWordCloud() {
         });
         
         // Add navigation item
-        addWordCloudNavItem();
+        // addWordCloudNavItem();
         
         // Setup real-time updates
         setupWordCloudRealTimeUpdates(cloudContainer);
@@ -2610,7 +2610,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // loadTimeline(timelineEvents);
         setupModal();
         setupSmoothScrolling();
-        createCountdown();
+        // createCountdown();
         setupHeroSlideshow();
         celebrateWithConfetti();
         
