@@ -62,21 +62,6 @@ function showLoginScreen() {
     document.body.appendChild(overlay);
 }
 
-function addLogoutButton() {
-    const nav = document.querySelector('nav ul');
-    const logoutItem = document.createElement('li');
-    const logoutLink = document.createElement('a');
-    logoutLink.href = '#';
-    logoutLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-    logoutLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        localStorage.removeItem('scrapbookAuth');
-        window.location.reload();
-    });
-    logoutItem.appendChild(logoutLink);
-    nav.appendChild(logoutItem);
-}
-
 // Confetti Animation
 function celebrateWithConfetti() {
     const duration = 3 * 1000;
@@ -1321,8 +1306,13 @@ function setupBirthdayCard() {
     displaySignatures(signatures, signatureContainer);
     console.log('signture ---- ' + signatures)
     
-    // Toggle card open/close
+    // Handle card click and authentication
     card.addEventListener('click', function() {
+        if (!checkAuth()) {
+            showLoginScreen();
+            return;
+        }
+        // Only toggle open/close if authenticated
         this.classList.toggle('open');
     });
     
@@ -1330,13 +1320,18 @@ function setupBirthdayCard() {
     cardForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        if (!checkAuth()) {
+            showLoginScreen();
+            return;
+        }
+        
         const nameInput = document.getElementById('card-name');
         const messageInput = document.getElementById('card-message-input');
         
         if (!nameInput || !messageInput) return;
         
-        const name = nameInput.value.trim();
-        const message = messageInput.value.trim();
+        const name = nameInput.value;
+        const message = messageInput.value;
         
         if (name && message) {
             // Add new signature
@@ -2306,14 +2301,6 @@ function addWordCloudCSS() {
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Check auth first
-    if (!checkAuth()) {
-        showLoginScreen();
-        return; // Don't initialize the rest until authenticated
-    } else {
-        addLogoutButton();
-    }
-    
     // Initialize Firebase
     try {
         initializeFirebase();
