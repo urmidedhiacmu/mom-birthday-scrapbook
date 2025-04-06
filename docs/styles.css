@@ -130,8 +130,8 @@ main {
 
 /* Gallery Styles */
 .gallery-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
     gap: 20px;
 }
 

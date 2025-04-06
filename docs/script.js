@@ -106,74 +106,6 @@ function createCountdown() {
     // Create countdown element in the header
     const titleContainer = document.querySelector('.title-container');
     if (!titleContainer) return; // Safety check
-    
-    const countdownContainer = document.createElement('div');
-    countdownContainer.className = 'countdown-container';
-    
-    const countdownTitle = document.createElement('p');
-    countdownTitle.className = 'countdown-title';
-    countdownTitle.textContent = 'Countdown to the big day:';
-    
-    const countdownTimer = document.createElement('div');
-    countdownTimer.className = 'countdown-timer';
-    countdownTimer.innerHTML = `
-        <div class="countdown-item">
-            <span id="countdown-days">00</span>
-            <span class="countdown-label">Days</span>
-        </div>
-        <div class="countdown-item">
-            <span id="countdown-hours">00</span>
-            <span class="countdown-label">Hours</span>
-        </div>
-        <div class="countdown-item">
-            <span id="countdown-minutes">00</span>
-            <span class="countdown-label">Minutes</span>
-        </div>
-        <div class="countdown-item">
-            <span id="countdown-seconds">00</span>
-            <span class="countdown-label">Seconds</span>
-        </div>
-    `;
-    
-    countdownContainer.appendChild(countdownTitle);
-    countdownContainer.appendChild(countdownTimer);
-    titleContainer.appendChild(countdownContainer);
-    
-    // Update the countdown every 1 second
-    const countdownFunction = setInterval(function() {
-        // Get today's date and time
-        const now = new Date().getTime();
-        
-        // Set the birthday date
-        const birthday = new Date(birthdayDate).getTime();
-        
-        // Find the distance between now and the birthday date
-        const distance = birthday - now;
-        
-        // If the birthday is in the past, show a celebration message
-        if (distance < 0) {
-            clearInterval(countdownFunction);
-            countdownTimer.innerHTML = '<div class="birthday-message">Happy 50th Birthday Mom! 🎉</div>';
-            return;
-        }
-        
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        // Display the result
-        const daysElement = document.getElementById("countdown-days");
-        const hoursElement = document.getElementById("countdown-hours");
-        const minutesElement = document.getElementById("countdown-minutes");
-        const secondsElement = document.getElementById("countdown-seconds");
-        
-        if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
-        if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
-        if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
-        if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
-    }, 1000);
 }
 
 // Quiz Functionality
@@ -571,29 +503,249 @@ function loadGallery(photos) {
 
     galleryContainer.innerHTML = ''; // Clear container first
 
-    photos.forEach(photo => {
-        const galleryItem = document.createElement('div');
-        galleryItem.className = 'gallery-item';
+    // Create category navigation
+    const categoryNav = document.createElement('div');
+    categoryNav.className = 'category-nav';
+    
+    const categories = ['All', 'Family', 'Celebrations', 'Travel', 'Childhood'];
+    let currentCategory = 'All';
 
-        const img = document.createElement('img');
-        img.src = photo.src;
-        img.alt = photo.caption;
-        img.loading = 'lazy';
+    // Add category navigation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f4ff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-        const caption = document.createElement('div');
-        caption.className = 'gallery-caption';
-        caption.textContent = photo.caption;
+        .category-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: white;
+            color: #8e44ad;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
 
-        galleryItem.appendChild(img);
-        galleryItem.appendChild(caption);
+        .category-btn:hover {
+            background: #f0e6f6;
+        }
 
-        // Add click event to open modal
-        galleryItem.addEventListener('click', function() {
-            openModal(photo.src, photo.caption);
+        .category-btn.active {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .pagination-button {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .pagination-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-info {
+            font-size: 1rem;
+            color: #666;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create category buttons
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.className = `category-btn ${category === currentCategory ? 'active' : ''}`;
+        button.textContent = category;
+        button.addEventListener('click', () => {
+            // Update active state
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            currentCategory = category;
+            
+            // Filter and display photos
+            const filteredPhotos = category === 'All' 
+                ? photos 
+                : photos.filter(photo => photo.category === category);
+            
+            currentPage = 0; // Reset to first page
+            displayPage(0, filteredPhotos);
         });
-
-        galleryContainer.appendChild(galleryItem);
+        categoryNav.appendChild(button);
     });
+
+    // Create pagination container
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination-container';
+    
+    // Create gallery grid
+    const galleryGrid = document.createElement('div');
+    galleryGrid.className = 'gallery-grid';
+    
+    // Create pagination controls
+    const paginationControls = document.createElement('div');
+    paginationControls.className = 'pagination-controls';
+    
+    const prevButton = document.createElement('button');
+    prevButton.className = 'pagination-button prev';
+    prevButton.innerHTML = '❮ Previous';
+    
+    const nextButton = document.createElement('button');
+    nextButton.className = 'pagination-button next';
+    nextButton.innerHTML = 'Next ❯';
+    
+    const pageInfo = document.createElement('span');
+    pageInfo.className = 'page-info';
+    
+    paginationControls.appendChild(prevButton);
+    paginationControls.appendChild(pageInfo);
+    paginationControls.appendChild(nextButton);
+    
+    // Pagination functionality
+    const itemsPerPage = 8;
+    let currentPage = 0;
+    
+    function displayPage(page, photosToDisplay = photos) {
+        galleryGrid.innerHTML = '';
+        const totalPages = Math.ceil(photosToDisplay.length / itemsPerPage);
+        const startIndex = page * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, photosToDisplay.length);
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            const photo = photosToDisplay[i];
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = photo.src;
+            img.alt = photo.caption;
+            img.loading = 'lazy';
+            
+            const caption = document.createElement('div');
+            caption.className = 'gallery-caption';
+            caption.textContent = photo.caption;
+            
+            galleryItem.appendChild(img);
+            galleryItem.appendChild(caption);
+            
+            // Add click event to open modal
+            galleryItem.addEventListener('click', function() {
+                openModal(photo.src, photo.caption);
+            });
+            
+            galleryGrid.appendChild(galleryItem);
+        }
+        
+        // Update pagination controls
+        pageInfo.textContent = `Page ${page + 1} of ${totalPages}`;
+        prevButton.disabled = page === 0;
+        nextButton.disabled = page === totalPages - 1;
+    }
+    
+    // Navigation event listeners
+    prevButton.addEventListener('click', () => {
+        if (currentPage > 0) {
+            currentPage--;
+            const filteredPhotos = currentCategory === 'All' 
+                ? photos 
+                : photos.filter(photo => photo.category === currentCategory);
+            displayPage(currentPage, filteredPhotos);
+        }
+    });
+    
+    nextButton.addEventListener('click', () => {
+        const filteredPhotos = currentCategory === 'All' 
+            ? photos 
+            : photos.filter(photo => photo.category === currentCategory);
+        const totalPages = Math.ceil(filteredPhotos.length / itemsPerPage);
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            displayPage(currentPage, filteredPhotos);
+        }
+    });
+    
+    // Assemble gallery
+    galleryContainer.appendChild(categoryNav);
+    paginationContainer.appendChild(galleryGrid);
+    paginationContainer.appendChild(paginationControls);
+    galleryContainer.appendChild(paginationContainer);
+    
+    // Display first page
+    displayPage(0);
 }
 
 function loadMessages(messages) {
@@ -1538,43 +1690,6 @@ function setupMomsFavorites() {
                 subtitle: "Vanilla Latte",
                 description: "Can't start her day without her favorite coffee blend.",
                 image: "https://source.unsplash.com/random/400x300/?coffee,latte",
-                link: "#"
-            }
-        ],
-        places: [
-            {
-                title: "Paris, France",
-                subtitle: "Dream Destination",
-                description: "Her dream vacation spot that she finally visited for her 40th birthday.",
-                image: "https://source.unsplash.com/random/400x300/?paris,eiffel",
-                link: "#"
-            },
-            {
-                title: "Grandma's Farm",
-                subtitle: "Childhood Memories",
-                description: "Where she spent summers as a child and learned to garden.",
-                image: "https://source.unsplash.com/random/400x300/?farm,countryside",
-                link: "#"
-            },
-            {
-                title: "Lake House",
-                subtitle: "Family Vacation Spot",
-                description: "Our family's favorite summer destination for 15 years.",
-                image: "https://source.unsplash.com/random/400x300/?lake,cabin",
-                link: "#"
-            },
-            {
-                title: "The Local Bookstore",
-                subtitle: "Weekly Visit",
-                description: "Where she spends every Saturday morning browsing new books.",
-                image: "https://source.unsplash.com/random/400x300/?bookstore,cozy",
-                link: "#"
-            },
-            {
-                title: "The Garden",
-                subtitle: "Home",
-                description: "Her sanctuary where she spends hours tending to her plants.",
-                image: "https://source.unsplash.com/random/400x300/?garden,flowers",
                 link: "#"
             }
         ],
