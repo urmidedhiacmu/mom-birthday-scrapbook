@@ -545,7 +545,7 @@ function setupHeroSlideshow() {
     const slideshowImages = [
         'images/Solo/IMG_9492.JPG',
         'images/Solo/1.jpg',
-        'images/Solo/IMG_20180529_181848_HDR.jpg',
+        'images/Solo/Picture017.jpg',
         'images/Solo/Picture068.jpg',
         'images/Solo/IMG_20180529_181848_HDR.jpg',
         'images/Solo/IMG-20250309-WA0408.jpg'
@@ -555,7 +555,7 @@ function setupHeroSlideshow() {
     const coverImage = document.querySelector('.cover-image');
     if (!coverImage) return; // Safety check
     
-    // Current slide index
+    // Current slide index - start with 1 for the second slide
     let currentSlide = 1;
     
     // Preload images
@@ -586,11 +586,13 @@ function setupHeroSlideshow() {
     
     // Set initial background image immediately (before starting the slideshow)
     coverImage.style.backgroundImage = `url('${slideshowImages[0]}')`;
+    coverImage.style.opacity = '1';
     
     // Preload images first
     preloadImages();
     
     // Start the slideshow after a brief delay
+    // This will now start with the second image (index 1)
     setTimeout(() => {
         setInterval(changeBackground, 3000);
     }, 2000);
