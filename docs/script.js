@@ -544,9 +544,9 @@ function setupHeroSlideshow() {
     // Array of background images for the slideshow
     const slideshowImages = [
         'images/Solo/IMG_9492.JPG',
-        'images/Solo/1.JPG',
-        'images/Solo/Picture017.JPG',
-        'images/Solo/Picture068.JPG',
+        'images/Solo/1.jpg',
+        'images/Solo/Picture017.jpg',
+        'images/Solo/Picture068.jpg',
         'images/Solo/IMG_20180529_181848_HDR.jpg',
         'images/Solo/IMG-20250309-WA0408.jpg'
     ];
@@ -2162,21 +2162,7 @@ function setupWordCloud() {
         // If no words in Firebase, use sample words
         if (words.length === 0) {
             const sampleWords = [
-                { text: "Loving", contributor: "Dad" },
-                { text: "Kind", contributor: "Sarah" },
-                { text: "Creative", contributor: "Mike" },
-                { text: "Thoughtful", contributor: "Aunt Jane" },
-                { text: "Funny", contributor: "Uncle Bob" },
-                { text: "Caring", contributor: "Grandma" },
-                { text: "Smart", contributor: "Cousin Tom" },
-                { text: "Generous", contributor: "Friends" },
-                { text: "Patient", contributor: "Neighbor" },
-                { text: "Strong", contributor: "Coworker" },
-                { text: "Beautiful", contributor: "Sister" },
-                { text: "Inspiring", contributor: "Teacher" },
-                { text: "Supportive", contributor: "Brother" },
-                { text: "Dedicated", contributor: "Boss" },
-                { text: "Talented", contributor: "Friend" }
+                { text: "Inspiring", contributor: "Urmi" },
             ];
             
             // Add sample words to Firebase
