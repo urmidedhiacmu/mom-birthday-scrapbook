@@ -545,7 +545,7 @@ function setupHeroSlideshow() {
     const slideshowImages = [
         'images/Solo/IMG_9492.JPG',
         'images/Solo/1.jpg',
-        'images/Solo/Picture017.jpg',
+        'images/Solo/IMG_20180529_181848_HDR.jpg',
         'images/Solo/Picture068.jpg',
         'images/Solo/IMG_20180529_181848_HDR.jpg',
         'images/Solo/IMG-20250309-WA0408.jpg'
