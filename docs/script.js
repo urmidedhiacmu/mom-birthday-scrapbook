@@ -1972,54 +1972,62 @@ function setupThisDayInHistory() {
         {
             category: "World Events",
             title: "Microsoft Founded",
-            description: "Bill Gates and Paul Allen founded Microsoft Corporation on April 4, 1975, just days before Mom was born."
+            description: "Just two days before Jalpa was born, Microsoft Corporation was founded by Bill Gates and Paul Allen on April 4, 1975."
         },
         {
-            category: "Entertainment",
-            title: "Super Hit Song",
-            description: "'Philadelphia Freedom' by Elton John was at the top of the charts that week."
+            category: "Global",
+            title: "World Population Hits 4 Billion",
+            description: "Around April 1975, the world's population officially crossed 4 billion people for the first time in history."
+        },
+        
+        {
+                category: "Entertainment",
+                title: "Amitabh Bachchan Becomes a Superstar",
+                description: "By 1975, Amitabh Bachchan was winning hearts across India with iconic roles in movies like Deewaar and Zanjeer."
+            
         },
         {
             category: "Sports",
-            title: "Champion Boxer",
-            description: "Muhammad Ali was the reigning Heavyweight Champion of the world."
+            title: "India’s Cricket Captain",
+            description: "Mansoor Ali Khan Pataudi had recently retired, and India was preparing for a new cricketing era."
         },
         {
             category: "Technology",
-            title: "First Personal Computer",
-            description: "The Altair 8800, one of the first personal computers, had just been released a few months earlier."
+            title: "First Personal Computers Debut",
+            description: "The Altair 8800, the first successful personal computer, had just started inspiring techies worldwide."
         },
         {
             category: "Movies",
-            title: "Academy Awards",
-            description: "'The Godfather Part II' had just won the Oscar for Best Picture at the 47th Academy Awards."
+            title: "Bollywood Buzz",
+            description: "'Sholay', destined to become one of India's biggest blockbusters, was about to hit theaters later that year."
         },
         {
             category: "Politics",
-            title: "US President",
-            description: "Gerald Ford was the President of the United States."
+            title: "Indira Gandhi Leading India",
+            description: "Indira Gandhi was the Prime Minister of India, steering the country through a dynamic political period."
         },
         {
             category: "Culture",
             title: "Fashion Trends",
-            description: "Bell-bottom pants, platform shoes, and disco styles were all the rage."
+            description: "Bell-bottoms, polka dots, and chiffon sarees were the hottest fashion statement of 1975."
         },
         {
             category: "Cost of Living",
-            title: "Average Prices",
-            description: "A gallon of gas cost about 57 cents, a new house averaged $42,600, and the average income was $14,100 per year."
+            title: "Life in 1975",
+            description: "Gold cost about ₹540 per 10 grams and a movie ticket was just around ₹1.50!"
         },
         {
             category: "Science",
-            title: "Space Exploration",
-            description: "NASA was preparing for the Apollo-Soyuz Test Project, the first joint U.S.-Soviet space mission."
+            title: "India’s Space Dreams",
+            description: "ISRO was laying the foundation for India's first satellite launch, with Aryabhata set to launch in 1975."
         },
         {
             category: "Television",
-            title: "Popular TV Shows",
-            description: "'All in the Family', 'M*A*S*H', and 'The Waltons' were among the most popular TV shows."
+            title: "Doordarshan Days",
+            description: "Doordarshan was India's only TV channel, broadcasting shows like 'Krishi Darshan' and Sunday movies."
         }
     ];
+    
     
     // Display the events
     displayHistoricalEvents(historicalEvents);
