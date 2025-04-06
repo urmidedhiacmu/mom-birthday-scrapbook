@@ -71,31 +71,47 @@ function showLoginScreen() {
 
 // Confetti Animation
 function celebrateWithConfetti() {
-    const duration = 3 * 1000;
+    const duration = 3 * 1000; // 3 seconds
     const end = Date.now() + duration;
+    
+    const colors = [
+        '#ff8ba7', // highlight pink
+        '#ffc6c7', // secondary pink
+        '#faeee7', // background peach
+        '#c3f0ca', // pastel green 🍃
+        '#c3f0ca', // pastel green (extra)
+        '#fffffe', // soft white
+        '#ffcfdf', // soft coral
+        '#c1fba4', // mint green
+        '#e0f9b5', // light lime
+        '#c1d3fe', // baby blue
+        '#e4c1f9', // lavender purple
+        '#fde2e4'  // soft blush
+    ];
     
     (function frame() {
         confetti({
-            particleCount: 2,
+            particleCount: 5,
             angle: 60,
-            spread: 55,
+            spread: 70,
             origin: { x: 0 },
-            colors: ['#8e44ad', '#e84393', '#3498db', '#f1c40f']
+            colors: colors
         });
         
         confetti({
-            particleCount: 2,
+            particleCount: 5,
             angle: 120,
-            spread: 55,
+            spread: 70,
             origin: { x: 1 },
-            colors: ['#8e44ad', '#e84393', '#3498db', '#f1c40f']
+            colors: colors
         });
         
         if (Date.now() < end) {
             requestAnimationFrame(frame);
         }
-    }());
+    })();
 }
+
 
 // Countdown Timer
 function createCountdown() {
@@ -524,15 +540,15 @@ styleElement.textContent = `
 `;
 document.head.appendChild(styleElement);
 
-// Hero Slideshow
 function setupHeroSlideshow() {
     // Array of background images for the slideshow
-    // Replace with your own images
     const slideshowImages = [
-        'https://source.unsplash.com/random/1920x1080/?family,1',
-        'https://source.unsplash.com/random/1920x1080/?mother,2',
-        'https://source.unsplash.com/random/1920x1080/?birthday,3',
-        'https://source.unsplash.com/random/1920x1080/?celebration,4'
+        'images/Solo/IMG_9492.JPG',
+        'images/Solo/1.JPG',
+        'images/Solo/Picture017.JPG',
+        'images/Solo/Picture068.JPG',
+        'images/Solo/IMG_20180529_181848_HDR.jpg',
+        'images/Solo/IMG-20250309-WA0408.jpg'
     ];
     
     // Get the cover image element
@@ -540,7 +556,15 @@ function setupHeroSlideshow() {
     if (!coverImage) return; // Safety check
     
     // Current slide index
-    let currentSlide = 0;
+    let currentSlide = 1;
+    
+    // Preload images
+    const preloadImages = () => {
+        slideshowImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    };
     
     // Function to change the background image
     function changeBackground() {
@@ -560,8 +584,16 @@ function setupHeroSlideshow() {
     // Add transition effect to cover image
     coverImage.style.transition = 'opacity 1s ease-in-out';
     
-    // Start the slideshow
-    setInterval(changeBackground, 5000);
+    // Set initial background image immediately (before starting the slideshow)
+    coverImage.style.backgroundImage = `url('${slideshowImages[0]}')`;
+    
+    // Preload images first
+    preloadImages();
+    
+    // Start the slideshow after a brief delay
+    setTimeout(() => {
+        setInterval(changeBackground, 3000);
+    }, 2000);
 }
 
 // Main content functions
@@ -581,122 +613,125 @@ function loadGallery(photos) {
     // Add category navigation styles
     const style = document.createElement('style');
     style.textContent = `
-        .category-nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding: 15px;
-            background: #f8f4ff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    .category-nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        padding: 15px;
+        background: #fffffe; /* main background */
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(51, 39, 42, 0.1); /* stroke color with opacity */
+    }
 
-        .category-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            background: white;
-            color: #8e44ad;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
+    .category-btn {
+        padding: 10px 20px;
+        border: 2px solid #33272a; /* stroke */
+        border-radius: 25px;
+        background: #ff8ba7; /* button */
+        color: #33272a; /* button text */
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        .category-btn:hover {
-            background: #f0e6f6;
-        }
+    .category-btn:hover {
+        background: #ffc6c7; /* secondary color for hover */
+    }
 
-        .category-btn.active {
-            background: #8e44ad;
-            color: white;
-        }
+    .category-btn.active {
+        background: #ff8ba7; /* highlight (same as button) */
+        color: #33272a; /* button text */
+        border-color: #33272a; /* keep stroke */
+    }
 
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 1;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            width: 100%;
-        }
-        
-        .gallery-item:hover {
-            transform: scale(1.02);
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        
-        .pagination-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-        }
-        
-        .pagination-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
 
-        .facts-nav-button {
-            background-color: #8e44ad;
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+    .gallery-item {
+        position: relative;
+        aspect-ratio: 1;
+        overflow: hidden;
+        border-radius: 8px;
+        background: #faeee7; /* background */
+        box-shadow: 0 2px 5px rgba(51, 39, 42, 0.1);
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
 
-        .facts-nav-button:hover {
-            background-color: #732d91;
-        }
+    .gallery-item:hover {
+        transform: scale(1.02);
+    }
 
-        .facts-nav-button:disabled {
-            background-color: #d0b6e0;
-            cursor: not-allowed;
-        }
-        
-        .page-info {
-            font-size: 1rem;
-            color: #666;
-        }
-    `;
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(51, 39, 42, 0.7); /* stroke color dark overlay */
+        color: #fffffe; /* main background (light text) */
+        padding: 8px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .pagination-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .facts-nav-button {
+        background-color: #ff8ba7; /* button */
+        color: #33272a; /* button text */
+        border: 2px solid #33272a; /* stroke */
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .facts-nav-button:hover {
+        background-color: #ffc6c7; /* secondary hover */
+    }
+
+    .facts-nav-button:disabled {
+        background-color: #c3f0ca; /* tertiary color */
+        color: #594a4e; /* paragraph text for disabled */
+        cursor: not-allowed;
+    }
+
+    .page-info {
+        font-size: 1rem;
+        color: #594a4e; /* paragraph */
+    }
+`;
+
     document.head.appendChild(style);
 
     // Create category buttons
@@ -2250,15 +2285,15 @@ function generateWordCloud(words, container) {
     const width = container.offsetWidth;
     const height = container.offsetHeight;
     
-    // Generate color scale - use the primary color as basis
+    // Generate color scale - use the primary and accent color from your theme
     const computedStyle = getComputedStyle(document.documentElement);
-    const primaryColor = computedStyle.getPropertyValue('--primary-color').trim();
-    const accentColor = computedStyle.getPropertyValue('--accent-color').trim();
+    const primaryColor = computedStyle.getPropertyValue('--highlight').trim() || '#ff8ba7'; // highlight
+    const accentColor = computedStyle.getPropertyValue('--secondary').trim() || '#ffc6c7'; // secondary
     
     // Use D3's color interpolation
     const colorScale = d3.scaleLinear()
         .domain([0, 1])
-        .range([primaryColor || '#8e44ad', accentColor || '#e84393']);
+        .range([primaryColor, accentColor]);
     
     // Create the layout
     const layout = d3.layout.cloud()
@@ -2266,7 +2301,7 @@ function generateWordCloud(words, container) {
         .words(words)
         .padding(5)
         .rotate(function() { return ~~(Math.random() * 2) * 90; })
-        .font('Dancing Script')
+        .font('Lora')  // <--- Fixed font here
         .fontSize(function(d) { return d.size; })
         .on('end', draw);
     
@@ -2289,8 +2324,8 @@ function generateWordCloud(words, container) {
             .data(words)
             .enter().append('text')
             .style('font-size', function(d) { return d.size + 'px'; })
-            .style('font-family', 'Dancing Script, cursive')
-            .style('fill', function() { return colorScale(Math.random()); })
+            .style('font-family', 'Lora, serif')   // <--- Fixed font here
+            .style('fill', function() { return colorScale(Math.random()); }) // pastel pinks
             .attr('text-anchor', 'middle')
             .attr('class', 'word-cloud-word')
             .attr('transform', function(d) {
@@ -2322,6 +2357,7 @@ function generateWordCloud(words, container) {
             });
     }
 }
+
 
 // Function to load words from Firebase
 function loadWordsFromFirebase() {

@@ -6,15 +6,15 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f9f7f7;
+    font-family: "Open Sans";
+    background-color: #FAEEE7;
     color: #555;
     line-height: 1.6;
 }
 
-h1, h2, h3 {
-    font-family: 'Dancing Script', cursive;
-    color: #8e44ad;
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Oswald';
+    color: #33272A;
 }
 
 /* Header Styles */
@@ -23,8 +23,8 @@ header {
 }
 
 .cover-image {
-    height: 100vh;
-    background-image: url('https://source.unsplash.com/random/1920x1080/?family'); /* Placeholder - replace with your own image */
+    height:90vh;
+    /* background-image: url('images/Solo/1.jpg'); Placeholder - replace with your own image */
     background-size: cover;
     background-position: center;
     position: relative;
@@ -73,7 +73,7 @@ header {
 
 /* Navigation */
 nav {
-    background-color: #8e44ad;
+    background-color: #33272A;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -232,7 +232,7 @@ main {
 }
 
 .message-card {
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
@@ -251,7 +251,7 @@ main {
 
 .message-sender {
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .message-date {
@@ -265,7 +265,7 @@ main {
 
 /* Message Form */
 .add-message {
-    background-color: #f0e6f6;
+    background-color: #FFC6C7;
     padding: 2rem;
     border-radius: 10px;
 }
@@ -294,7 +294,7 @@ main {
 }
 
 #message-form button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -305,7 +305,7 @@ main {
 }
 
 #message-form button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 /* Music and Video Sections */
@@ -348,7 +348,7 @@ main {
     content: '';
     position: absolute;
     width: 6px;
-    background-color: #8e44ad;
+    background-color: #33272A;
     top: 0;
     bottom: 0;
     left: 50%;
@@ -370,7 +370,7 @@ main {
     height: 25px;
     right: -17px;
     background-color: white;
-    border: 4px solid #8e44ad;
+    border: 4px solid #33272A;
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -398,7 +398,7 @@ main {
 
 .timeline-date {
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
     margin-bottom: 10px;
 }
 
@@ -416,7 +416,7 @@ main {
 footer {
     text-align: center;
     padding: 2rem;
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     margin-top: 2rem;
 }
@@ -457,7 +457,7 @@ footer .fa-heart {
 .countdown-item span:first-child {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .countdown-label {
@@ -470,7 +470,7 @@ footer .fa-heart {
     font-size: 1.8rem;
     font-weight: bold;
     color: white;
-    background-color: #8e44ad;
+    background-color: #33272A;
     padding: 1rem 2rem;
     border-radius: 8px;
     animation: pulse 2s infinite;
@@ -508,7 +508,7 @@ footer .fa-heart {
 
 .login-box h2 {
     margin-bottom: 1.5rem;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .login-box input {
@@ -521,7 +521,7 @@ footer .fa-heart {
 }
 
 .login-box button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     padding: 12px 30px;
@@ -532,7 +532,7 @@ footer .fa-heart {
 }
 
 .login-box button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 /* Quiz Styles */
@@ -552,7 +552,7 @@ footer .fa-heart {
 }
 
 .quiz-button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     padding: 12px 25px;
@@ -563,11 +563,11 @@ footer .fa-heart {
 }
 
 .quiz-button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 .quiz-question {
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
@@ -593,7 +593,7 @@ footer .fa-heart {
 
 .quiz-option {
     background-color: white;
-    border: 2px solid #8e44ad;
+    border: 2px solid #33272A;
     padding: 12px 20px;
     border-radius: 8px;
     font-size: 1rem;
@@ -603,7 +603,7 @@ footer .fa-heart {
 }
 
 .quiz-option:hover:not(:disabled) {
-    background-color: #f0e6f6;
+    background-color: #FFC6C7;
 }
 
 .quiz-option.correct {
@@ -627,7 +627,7 @@ footer .fa-heart {
 
 .quiz-results {
     text-align: center;
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
@@ -643,7 +643,7 @@ footer .fa-heart {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background-color: #8e44ad;
+    background-color: #33272A;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -660,7 +660,7 @@ footer .fa-heart {
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 /* Responsiveness */
@@ -742,8 +742,8 @@ footer .fa-heart {
 }
 
 .guestbook-entry {
-    background-color: #f8f4ff;
-    border-left: 4px solid #8e44ad;
+    background-color: #FFFFFE;
+    border-left: 4px solid #33272A;
     padding: 1.5rem;
     border-radius: 0 8px 8px 0;
     box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
@@ -757,7 +757,7 @@ footer .fa-heart {
 
 .guest-name {
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
     font-size: 1.1rem;
 }
 
@@ -777,7 +777,7 @@ footer .fa-heart {
 }
 
 .add-entry {
-    background-color: #f0e6f6;
+    background-color: #FFC6C7;
     padding: 2rem;
     border-radius: 10px;
 }
@@ -810,7 +810,7 @@ footer .fa-heart {
 }
 
 #guestbook-form button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -821,13 +821,13 @@ footer .fa-heart {
 }
 
 #guestbook-form button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 /* Quiz Leaderboard Styles */
 .quiz-leaderboard {
     margin-top: 2rem;
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     border-radius: 10px;
     padding: 1.5rem;
     box-shadow: 0 3px 8px rgba(142, 68, 173, 0.1);
@@ -836,7 +836,7 @@ footer .fa-heart {
 .quiz-leaderboard h3 {
     text-align: center;
     margin-bottom: 1rem;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .leaderboard-table {
@@ -852,17 +852,17 @@ footer .fa-heart {
 }
 
 .leaderboard-table th {
-    background-color: #e6d7f2;
-    color: #8e44ad;
+    background-color: #C3F0CA;
+    color: #33272A;
     font-weight: bold;
 }
 
 .leaderboard-table tr:nth-child(even) {
-    background-color: #f9f5ff;
+    background-color: #FFFFFE;
 }
 
 .leaderboard-table tr:hover {
-    background-color: #f0e6f6;
+    background-color: #FFC6C7;
 }
 
 .leaderboard-rank {
@@ -876,7 +876,7 @@ footer .fa-heart {
 
 .leaderboard-score {
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .leaderboard-date {
@@ -922,7 +922,7 @@ footer .fa-heart {
 }
 
 .fact-card {
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(142, 68, 173, 0.1);
@@ -940,7 +940,7 @@ footer .fa-heart {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     width: 30px;
     height: 30px;
@@ -964,7 +964,7 @@ footer .fa-heart {
 }
 
 .facts-nav-button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     width: 40px;
@@ -978,7 +978,7 @@ footer .fa-heart {
 }
 
 .facts-nav-button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 .facts-nav-button:disabled {
@@ -1027,7 +1027,7 @@ footer .fa-heart {
 }
 
 .card-front {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     display: flex;
     flex-direction: column;
@@ -1036,7 +1036,7 @@ footer .fa-heart {
     text-align: center;
     padding: 2rem;
     transform: rotateY(0deg);
-    background-image: linear-gradient(135deg, #a569bd 0%, #8e44ad 100%);
+    background-image: linear-gradient(135deg, #FF8BA7 0%, #33272A 100%);
     z-index: 2;
 }
 
@@ -1091,7 +1091,7 @@ footer .fa-heart {
 .card-message h3 {
     margin-top: 0;
     margin-bottom: 1.5rem;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 .card-default-message {
@@ -1112,13 +1112,13 @@ footer .fa-heart {
 .card-signature {
     padding: 15px;
     border-radius: 8px;
-    background-color: #f8f4ff;
-    border-left: 3px solid #8e44ad;
+    background-color: #FFFFFE;
+    border-left: 3px solid #33272A;
 }
 
 .signature-name {
     font-weight: bold;
-    color: #8e44ad;
+    color: #33272A;
     margin-bottom: 5px;
 }
 
@@ -1130,7 +1130,7 @@ footer .fa-heart {
 .card-form-container {
     width: 100%;
     max-width: 600px;
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(142, 68, 173, 0.1);
@@ -1140,7 +1140,7 @@ footer .fa-heart {
     margin-top: 0;
     margin-bottom: 1.5rem;
     text-align: center;
-    color: #8e44ad;
+    color: #33272A;
 }
 
 #card-form {
@@ -1163,7 +1163,7 @@ footer .fa-heart {
 }
 
 #card-form button {
-    background-color: #8e44ad;
+    background-color: #33272A;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -1174,7 +1174,7 @@ footer .fa-heart {
 }
 
 #card-form button:hover {
-    background-color: #732d91;
+    background-color: #33272A;
 }
 
 @media (max-width: 768px) {
@@ -1209,7 +1209,7 @@ footer .fa-heart {
 }
 
 .favorite-tab {
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     border: 2px solid #e0e0e0;
     border-radius: 25px;
     padding: 10px 20px;
@@ -1222,13 +1222,13 @@ footer .fa-heart {
 }
 
 .favorite-tab:hover {
-    border-color: #8e44ad;
-    color: #8e44ad;
+    border-color: #33272A;
+    color: #33272A;
 }
 
 .favorite-tab.active {
-    background-color: #8e44ad;
-    border-color: #8e44ad;
+    background-color: #33272A;
+    border-color: #33272A;
     color: white;
 }
 
@@ -1299,7 +1299,7 @@ footer .fa-heart {
 .favorite-link {
     margin-top: 15px;
     display: inline-block;
-    color: #8e44ad;
+    color: #33272A;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -1322,13 +1322,23 @@ footer .fa-heart {
 
 /* Theme Toggle Styles */
 :root {
+    --primary-color: #33272A;
+    --primary-dark: #33272A;
+    --primary-light: #FF8BA7;
+    --accent-color: #FF8BA7;
+    --text-on-primary: #33272A;
+    --background-color: #FAEEE7;
+    --card-background: #FFFFFE;
+    --text-color: #594A4E;
+    --border-color: #33272A;
+
     /* Default Theme (Purple) */
-    --primary-color: #8e44ad;
-    --primary-light: #a569bd;
-    --primary-dark: #732d91;
+    --primary-color: #33272A;
+    --primary-light: #FF8BA7;
+    --primary-dark: #33272A;
     --accent-color: #e84393;
     --text-on-primary: white;
-    --background-color: #f9f7f7;
+    --background-color: #FAEEE7;
     --card-background: white;
     --text-color: #555;
     --border-color: #e0e0e0;
@@ -1340,7 +1350,7 @@ body.theme-blue {
     --primary-dark: #2980b9;
     --accent-color: #f39c12;
     --text-on-primary: white;
-    --background-color: #f0f8ff;
+    --background-color: #FFFFFE;
     --card-background: white;
     --text-color: #444;
     --border-color: #d4e6f1;
@@ -1352,7 +1362,7 @@ body.theme-pink {
     --primary-dark: #c2185b;
     --accent-color: #f19066;
     --text-on-primary: white;
-    --background-color: #fff0f5;
+    --background-color: #FFFFFE;
     --card-background: white;
     --text-color: #444;
     --border-color: #fce4ec;
@@ -1376,8 +1386,8 @@ body.theme-vintage {
     --primary-dark: #a04000;
     --accent-color: #7f8c8d;
     --text-on-primary: white;
-    --background-color: #f9f3e9;
-    --card-background: #fffaf0;
+    --background-color: #FFFFFE;
+    --card-background: #FFFFFE;
     --text-color: #5d4037;
     --border-color: #e0d6cc;
 }
@@ -1677,7 +1687,7 @@ button:hover, .quiz-button:hover, #message-form button:hover, #guestbook-form bu
 .wordcloud-form-container {
     width: 100%;
     max-width: 500px;
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(142, 68, 173, 0.1);
@@ -1750,7 +1760,7 @@ button:hover, .quiz-button:hover, #message-form button:hover, #guestbook-form bu
 }
 
 .gallery-tab {
-    background-color: #f8f4ff;
+    background-color: #FFFFFE;
     border: 2px solid #e0e0e0;
     border-radius: 25px;
     padding: 10px 20px;
