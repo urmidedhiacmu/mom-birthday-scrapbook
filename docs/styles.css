@@ -1951,3 +1951,15 @@ button:hover, .quiz-button:hover, #message-form button:hover, #guestbook-form bu
         height: 150px;
     }
 }
+
+.category-nav {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 15px; 
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #fffffe;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(51, 39, 42, 0.1);
+}

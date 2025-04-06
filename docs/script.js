@@ -609,7 +609,7 @@ function loadGallery(photos) {
     const categoryNav = document.createElement('div');
     categoryNav.className = 'category-nav';
     
-    const categories = ['All', 'Couple', 'Friends', 'Kids'];
+    const categories = ['All', 'Couple', 'Family', 'Friends', 'Kids'];
     let currentCategory = 'All';
 
     // Add category navigation styles
@@ -2505,6 +2505,40 @@ document.addEventListener('DOMContentLoaded', function() {
             { src: './images/couple/IMG20250305084256.jpg', caption: '', category:'Couple' },
             { src: './images/couple/IMG20250306104321.jpg', caption: '', category:'Couple' },
             { src: './images/couple/IMG20250311104848.jpg', caption: '', category:'Couple' },
+
+            { src: './images/family/100_1854.JPG', caption: '', category: 'Family' },
+            { src: './images/family/100_1979.JPG', caption: '', category: 'Family' },
+            { src: './images/family/100_2066.JPG', caption: '', category: 'Family' },
+            { src: './images/family/100_2198.JPG', caption: '', category: 'Family' },
+            { src: './images/family/20210125_175335.jpg', caption: '', category: 'Family' },
+            { src: './images/family/DSC_0078.jpg', caption: '', category: 'Family' },
+            { src: './images/family/DSC_0976.jpg', caption: '', category: 'Family' },
+            { src: './images/family/DSC_1333.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_1458.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_2825.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_2827.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_2828.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_3401.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_3705.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_3706.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_3742.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_3904.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_4077.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_4107.JPG', caption: '', category: 'Family' },
+            { src: './images/family/DSC_4114.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_3470.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_3480.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_6606.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_8845.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_8870.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_8872.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_8950.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_9030.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_9302.JPG', caption: '', category: 'Family' },
+            { src: './images/family/IMG_20170415_181034.jpg', caption: '', category: 'Family' },
+            { src: './images/family/IMG_20170624_165010.jpg', caption: '', category: 'Family' },
+            { src: './images/family/IMG_20190526_130448.jpg', caption: '', category: 'Family' },
+
             { src: './images/Friends/100_7040.JPG', caption: '', category:'Friends' },
             { src: './images/Friends/DSC_2822.JPG', caption: '', category:'Friends' },
             { src: './images/Friends/IMG_0255.JPG', caption: '', category:'Friends' },
