@@ -55,6 +55,13 @@ function showLoginScreen() {
         }
     });
     
+    // Add click event to close when clicking outside the login box
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+            overlay.remove();
+        }
+    });
+    
     loginBox.appendChild(heading);
     loginBox.appendChild(passwordInput);
     loginBox.appendChild(loginButton);
@@ -1295,16 +1302,14 @@ function addFactsNavItem() {
 function setupBirthdayCard() {
     const card = document.getElementById('birthday-card-element');
     const signatureContainer = document.getElementById('card-signatures');
-    const cardForm = document.getElementById('card-form');
     
-    if (!card || !signatureContainer || !cardForm) return;
+    if (!card || !signatureContainer) return;
     
     // Load saved signatures from localStorage
     let signatures = loadSignaturesFromStorage();
     
     // Display signatures
     displaySignatures(signatures, signatureContainer);
-    console.log('signture ---- ' + signatures)
     
     // Handle card click and authentication
     card.addEventListener('click', function() {
@@ -1317,53 +1322,53 @@ function setupBirthdayCard() {
     });
     
     // Handle form submission
-    cardForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // cardForm.addEventListener('submit', function(e) {
+    //     e.preventDefault();
         
-        if (!checkAuth()) {
-            showLoginScreen();
-            return;
-        }
+    //     if (!checkAuth()) {
+    //         showLoginScreen();
+    //         return;
+    //     }
         
-        const nameInput = document.getElementById('card-name');
-        const messageInput = document.getElementById('card-message-input');
+    //     const nameInput = document.getElementById('card-name');
+    //     const messageInput = document.getElementById('card-message-input');
         
-        if (!nameInput || !messageInput) return;
+    //     if (!nameInput || !messageInput) return;
         
-        const name = nameInput.value;
-        const message = messageInput.value;
+    //     const name = nameInput.value;
+    //     const message = messageInput.value;
         
-        if (name && message) {
-            // Add new signature
-            const newSignature = {
-                name: name,
-                message: message,
-                date: new Date().toISOString()
-            };
+    //     if (name && message) {
+    //         // Add new signature
+    //         const newSignature = {
+    //             name: name,
+    //             message: message,
+    //             date: new Date().toISOString()
+    //         };
             
-            signatures.push(newSignature);
+    //         signatures.push(newSignature);
             
-            // Save to localStorage
-            saveSignaturesToStorage(signatures);
+    //         // Save to localStorage
+    //         saveSignaturesToStorage(signatures);
             
-            // Update display
-            displaySignatures(signatures, signatureContainer);
+    //         // Update display
+    //         displaySignatures(signatures, signatureContainer);
             
-            // Clear form
-            cardForm.reset();
+    //         // Clear form
+    //         cardForm.reset();
             
-            // Open the card to show the new signature
-            card.classList.add('open');
+    //         // Open the card to show the new signature
+    //         card.classList.add('open');
             
-            // Scroll to the new signature
-            setTimeout(() => {
-                signatureContainer.scrollTop = signatureContainer.scrollHeight;
-            }, 500);
+    //         // Scroll to the new signature
+    //         setTimeout(() => {
+    //             signatureContainer.scrollTop = signatureContainer.scrollHeight;
+    //         }, 500);
             
-            // Show confirmation
-            alert('Thank you for signing the birthday card!');
-        }
-    });
+    //         // Show confirmation
+    //         alert('Thank you for signing the birthday card!');
+    //     }
+    // });
     
     // Add navigation item
     addBirthdayCardNavItem();
